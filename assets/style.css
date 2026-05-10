@@ -17,6 +17,7 @@ body {
     overflow-x: hidden;
     cursor: none;
     transition: color 0.4s ease;
+    position: relative;
 }
 
 body::before {

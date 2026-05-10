@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en" site-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>art gallery · dru's domain</title>
+  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    /* Fix: body needs position:relative so body::before z-index:-2 stacks correctly */
+    body {
+      position: relative;
+    }
+
+    /* ── Gallery-specific styles ── */
+
+    .gallery-header {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 52px 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s, transform 0.7s;
+    }
+
+    .gallery-header.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 14px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      cursor: none;
+      transition: background 0.2s, border-color 0.2s, color 0.2s, border-radius 0.3s;
+    }
+
+    .back-btn:hover {
+      background: var(--surface-hover);
+      border-color: var(--border-hover);
+      color: var(--text-primary);
+    }
+
+    .back-btn svg {
+      flex-shrink: 0;
+    }
+
+    [site-theme="y2k"] .back-btn {
+      border-radius: 0;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+    }
+
+    .gallery-title-group {
+      text-align: right;
+    }
+
+    .gallery-title-group h1 {
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.3px;
+    }
+
+    .gallery-title-group p {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    [site-theme="y2k"] .gallery-title-group h1 {
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      background: linear-gradient(90deg, #A770EF, #CF8BF3, #FDB99B);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    [site-theme="y2k"] .gallery-title-group p {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      color: #CF8BF3;
+    }
+
+    /* Theme toggle (reuse from main) */
+    .theme-toggle-btn {
+      margin: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s, border-radius 0.3s;
+      opacity: 1;
+    }
+
+    .theme-toggle-btn img {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .theme-toggle-btn:hover {
+      background: var(--surface-hover);
+      border-color: var(--border-hover);
+      transform: scale(1.08);
+    }
+
+    /* ── Masonry grid ── */
+
+    .masonry-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 40px auto 0;
+      padding: 0 24px 100px;
+    }
+
+    .masonry {
+      column-count: 3;
+      column-gap: 14px;
+    }
+
+    @media (max-width: 680px) {
+      .masonry {
+        column-count: 2;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .masonry {
+        column-count: 1;
+      }
+    }
+
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: 14px;
+      opacity: 0;
+      transform: translateY(28px) scale(0.97);
+      transition: opacity 0.6s, transform 0.6s;
+      cursor: none;
+    }
+
+    .masonry-item.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .masonry-item-inner {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: background 0.2s, border-color 0.2s, border-radius 0.3s, transform 0.25s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.25s;
+    }
+
+    [site-theme="y2k"] .masonry-item-inner {
+      border-radius: 0;
+      border-color: rgba(167, 112, 239, 0.35);
+    }
+
+    .masonry-item:hover .masonry-item-inner {
+      border-color: var(--border-hover);
+      transform: translateY(-3px) scale(1.015);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.22);
+    }
+
+    [site-theme="y2k"] .masonry-item:hover .masonry-item-inner {
+      box-shadow: 0 0 22px rgba(167, 112, 239, 0.28);
+      border-color: #FDB99B;
+    }
+
+    .masonry-img-wrap {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .masonry-img-wrap img,
+    .masonry-img-wrap .placeholder-img {
+      width: 100%;
+      display: block;
+      transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .masonry-item:hover .masonry-img-wrap img,
+    .masonry-item:hover .masonry-img-wrap .placeholder-img {
+      transform: scale(1.04);
+    }
+
+    /* Placeholder images using gradient swatches */
+    .placeholder-img {
+      width: 100%;
+      display: block;
+    }
+
+    .masonry-meta {
+      padding: 10px 13px 12px;
+    }
+
+    .masonry-meta strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+      transition: color 0.3s;
+    }
+
+    .masonry-meta span {
+      font-size: 11px;
+      color: var(--text-muted);
+      transition: color 0.3s;
+    }
+
+    [site-theme="y2k"] .masonry-meta strong {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: #CF8BF3;
+    }
+
+    [site-theme="y2k"] .masonry-meta span {
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      color: rgba(253, 185, 155, 0.6);
+    }
+
+    /* ── Modal / lightbox ── */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.82);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-box {
+      position: relative;
+      max-width: 780px;
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border-hover);
+      border-radius: 18px;
+      overflow: hidden;
+      transform: scale(0.93) translateY(16px);
+      transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+      cursor: none;
+    }
+
+    [site-theme="y2k"] .modal-box {
+      border-radius: 0;
+      border-color: #A770EF;
+      box-shadow: 0 0 40px rgba(167, 112, 239, 0.35);
+    }
+
+    .modal-backdrop.open .modal-box {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-img-area {
+      width: 100%;
+      position: relative;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-img-area img,
+    .modal-img-area .modal-placeholder {
+      width: 100%;
+      display: block;
+      max-height: 68vh;
+      object-fit: contain;
+    }
+
+    .modal-placeholder {
+      max-height: 68vh;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      z-index: 10;
+    }
+
+    .modal-close:hover {
+      background: rgba(0, 0, 0, 0.75);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: scale(1.08);
+    }
+
+    .modal-close svg {
+      display: block;
+    }
+
+    .modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 18px;
+      border-top: 1px solid var(--border);
+    }
+
+    .modal-meta strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+      transition: color 0.3s;
+    }
+
+    .modal-meta span {
+      font-size: 12px;
+      color: var(--text-muted);
+      transition: color 0.3s;
+    }
+
+    [site-theme="y2k"] .modal-meta strong {
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      color: #CF8BF3;
+    }
+
+    [site-theme="y2k"] .modal-meta span {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      color: rgba(253, 185, 155, 0.6);
+    }
+
+    .modal-view-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--surface-hover);
+      border: 1px solid var(--border-hover);
+      border-radius: 9px;
+      padding: 8px 14px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: none;
+      white-space: nowrap;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s, border-radius 0.3s;
+    }
+
+    .modal-view-btn:hover {
+      background: var(--surface);
+      transform: scale(1.04);
+    }
+
+    .modal-view-btn svg {
+      flex-shrink: 0;
+    }
+
+    [site-theme="y2k"] .modal-view-btn {
+      border-radius: 0;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: #FDB99B;
+      border-color: #A770EF;
+    }
+
+    /* nav arrows */
+    .modal-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+      z-index: 10;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .modal-nav:hover {
+      background: rgba(0, 0, 0, 0.75);
+      transform: translateY(-50%) scale(1.08);
+    }
+
+    .modal-nav.prev {
+      left: 12px;
+    }
+
+    .modal-nav.next {
+      right: 12px;
+    }
+
+    .modal-nav svg {
+      display: block;
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 0 0 48px;
+      font-size: 12px;
+      color: var(--footer-color);
+      opacity: 0;
+      transition: opacity 0.8s, color 0.3s;
+    }
+
+    footer.visible {
+      opacity: 1;
+    }
+
+    [site-theme="y2k"] footer {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="bg-light"></div>
+  <div id="bg-y2k"></div>
+  <div id="vaporwave-grid"><canvas id="grid-canvas"></canvas></div>
+  <canvas id="particles"></canvas>
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- Gallery header -->
+  <header class="gallery-header" data-reveal>
+    <a href="index.html" class="back-btn" data-magnetic>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 2L4 7l5 5" />
+      </svg>
+      back
+    </a>
+    <div class="gallery-title-group">
+      <h1>art gallery</h1>
+      <p>commissioned works · dru's domain</p>
+    </div>
+    <button class="theme-toggle-btn" id="toggleBtn" aria-label="Toggle theme" data-magnetic>
+      <img src="assets/icons/theme-dark.png" alt="dark mode" />
+    </button>
+  </header>
+
+  <!-- Masonry grid -->
+  <div class="masonry-wrap">
+    <div class="masonry" id="masonry">
+      <!-- Items injected by JS -->
+    </div>
+  </div>
+
+  <footer data-reveal>made by yours truly · banner art by <a href="https://x.com/Louu_Heroo"
+      style="color:#bb377d">@louu_heroo</a> · 2026</footer>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <div class="modal-box" id="modalBox">
+      <div class="modal-img-area" id="modalImgArea">
+        <!-- image injected -->
+        <button class="modal-close" id="modalClose" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="1.8"
+            stroke-linecap="round">
+            <path d="M2 2l10 10M12 2L2 12" />
+          </svg>
+        </button>
+        <button class="modal-nav prev" id="modalPrev" aria-label="Previous">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 2L4 7l5 5" />
+          </svg>
+        </button>
+        <button class="modal-nav next" id="modalNext" aria-label="Next">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#fff" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 2l5 5-5 5" />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-footer">
+        <div class="modal-meta">
+          <strong id="modalTitle">—</strong>
+          <span id="modalArtist">—</span>
+        </div>
+        <a href="#" id="modalViewBtn" class="modal-view-btn" target="_blank" rel="noopener" data-magnetic>
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 11L11 2M5 2h6v6" />
+          </svg>
+          view full image
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ─── Shared theme system ─── */
+    const root = document.documentElement;
+    const THEMES = ['dark', 'light', 'y2k'];
+    const ICONS = {
+      dark: '<img src="assets/icons/theme-dark.png"  alt="dark mode"  />',
+      light: '<img src="assets/icons/theme-light.png" alt="light mode" />',
+      y2k: '<img src="assets/icons/theme-y2k.png"   alt="y2k mode"  />'
+    };
+    let currentTheme = 'dark';
+    document.getElementById('toggleBtn').addEventListener('click', () => {
+      const toIdx = (THEMES.indexOf(currentTheme) + 1) % THEMES.length;
+      currentTheme = THEMES[toIdx];
+      root.setAttribute('site-theme', currentTheme);
+      document.getElementById('toggleBtn').innerHTML = ICONS[currentTheme];
+      if (currentTheme === 'y2k') startGrid(); else stopGrid();
+    });
+
+    /* ─── Gallery data (placeholders) ─── */
+    // Replace src with real image paths & fullSrc with full-res URLs when ready.
+    // Heights are used to generate SVG placeholder colours — remove once real images added.
+    const ITEMS = [
+      { title: 'Starlit Wanderer', artist: 'art by @artist_one', src: null, fullSrc: '#', ph: { h: 340, stops: ['#9b59b6', '#2c3e50'] } },
+      { title: 'Neon Bloom', artist: 'art by @pixel_flora', src: null, fullSrc: '#', ph: { h: 260, stops: ['#e84393', '#ff8c42'] } },
+      { title: 'Void Familiar', artist: 'art by @inkdreamer', src: null, fullSrc: '#', ph: { h: 420, stops: ['#1a1a2e', '#e94560'] } },
+      { title: 'Sakura Circuit', artist: 'art by @cyberbloom', src: null, fullSrc: '#', ph: { h: 300, stops: ['#f7a8c4', '#c471ed'] } },
+      { title: 'Lo-fi Horizon', artist: 'art by @dusk_render', src: null, fullSrc: '#', ph: { h: 380, stops: ['#0f3460', '#533483'] } },
+      { title: 'Mech Study No.4', artist: 'art by @steelpen', src: null, fullSrc: '#', ph: { h: 290, stops: ['#2c3e50', '#4ca1af'] } },
+      { title: 'Rabbit Form', artist: 'art by @softstroke', src: null, fullSrc: '#', ph: { h: 360, stops: ['#ffecd2', '#fcb69f'] } },
+      { title: 'Rave Witch', artist: 'art by @glitchpixel', src: null, fullSrc: '#', ph: { h: 310, stops: ['#6a3093', '#a044ff'] } },
+      { title: 'Quiet Signal', artist: 'art by @waveform_au', src: null, fullSrc: '#', ph: { h: 400, stops: ['#141e30', '#243b55'] } },
+      { title: 'Peach Protocol', artist: 'art by @pastelcore', src: null, fullSrc: '#', ph: { h: 270, stops: ['#fbd3e9', '#bb377d'] } },
+      { title: 'Cyber Garden', artist: 'art by @green_grid', src: null, fullSrc: '#', ph: { h: 350, stops: ['#134e5e', '#71b280'] } },
+      { title: 'Overclocked Dream', artist: 'art by @neonscribe', src: null, fullSrc: '#', ph: { h: 280, stops: ['#f7971e', '#ffd200'] } },
+    ];
+
+    /* ─── Build masonry grid ─── */
+    function makePlaceholderSVG(w, h, stops) {
+      const id = 'g' + Math.random().toString(36).slice(2, 7);
+      return `<svg class="placeholder-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
+    <defs>
+      <linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="${stops[0]}"/>
+        <stop offset="100%" stop-color="${stops[1]}"/>
+      </linearGradient>
+    </defs>
+    <rect width="${w}" height="${h}" fill="url(#${id})"/>
+    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="rgba(255,255,255,0.18)" font-size="13" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">[ placeholder ]</text>
+  </svg>`;
+    }
+
+    function makeModalPlaceholder(stops) {
+      const id = 'mg' + Math.random().toString(36).slice(2, 7);
+      return `<svg class="modal-placeholder" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+    <defs>
+      <linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="${stops[0]}"/>
+        <stop offset="100%" stop-color="${stops[1]}"/>
+      </linearGradient>
+    </defs>
+    <rect width="800" height="500" fill="url(#${id})"/>
+    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="rgba(255,255,255,0.22)" font-size="16" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">[ placeholder — replace with real image ]</text>
+  </svg>`;
+    }
+
+    const masonry = document.getElementById('masonry');
+    ITEMS.forEach((item, i) => {
+      const el = document.createElement('div');
+      el.className = 'masonry-item';
+      el.setAttribute('data-index', i);
+      const thumbW = 400;
+      const thumbH = item.ph.h;
+      const imgHTML = item.src
+        ? `<img src="${item.src}" alt="${item.title}" loading="lazy" />`
+        : makePlaceholderSVG(thumbW, thumbH, item.ph.stops);
+      el.innerHTML = `
+    <div class="masonry-item-inner">
+      <div class="masonry-img-wrap">${imgHTML}</div>
+      <div class="masonry-meta">
+        <strong>${item.title}</strong>
+        <span>${item.artist}</span>
+      </div>
+    </div>`;
+      masonry.appendChild(el);
+      el.addEventListener('click', () => openModal(i));
+    });
+
+    /* ─── Modal ─── */
+    const backdrop = document.getElementById('modalBackdrop');
+    const modalImgArea = document.getElementById('modalImgArea');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalArtist = document.getElementById('modalArtist');
+    const modalViewBtn = document.getElementById('modalViewBtn');
+    const modalClose = document.getElementById('modalClose');
+    const modalPrev = document.getElementById('modalPrev');
+    const modalNext = document.getElementById('modalNext');
+    let currentIdx = 0;
+
+    function openModal(idx) {
+      currentIdx = idx;
+      renderModal();
+      backdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      backdrop.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function renderModal() {
+      const item = ITEMS[currentIdx];
+      // remove old image/svg
+      const old = modalImgArea.querySelector('img, svg.modal-placeholder');
+      if (old) old.remove();
+      // insert new
+      const imgEl = item.src
+        ? Object.assign(document.createElement('img'), { src: item.src, alt: item.title })
+        : (() => {
+          const tmp = document.createElement('div');
+          tmp.innerHTML = makeModalPlaceholder(item.ph.stops);
+          return tmp.firstElementChild;
+        })();
+      modalImgArea.insertBefore(imgEl, modalImgArea.firstChild);
+      modalTitle.textContent = item.title;
+      modalArtist.textContent = item.artist;
+      modalViewBtn.href = item.src || item.fullSrc;
+      modalViewBtn.style.opacity = item.fullSrc === '#' ? '0.45' : '1';
+      // nav visibility
+      modalPrev.style.opacity = currentIdx === 0 ? '0.35' : '1';
+      modalNext.style.opacity = currentIdx === ITEMS.length - 1 ? '0.35' : '1';
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', e => { if (e.target === backdrop) closeModal(); });
+    modalPrev.addEventListener('click', e => {
+      e.stopPropagation();
+      if (currentIdx > 0) { currentIdx--; renderModal(); }
+    });
+    modalNext.addEventListener('click', e => {
+      e.stopPropagation();
+      if (currentIdx < ITEMS.length - 1) { currentIdx++; renderModal(); }
+    });
+    document.addEventListener('keydown', e => {
+      if (!backdrop.classList.contains('open')) return;
+      if (e.key === 'Escape') closeModal();
+      if (e.key === 'ArrowLeft' && currentIdx > 0) { currentIdx--; renderModal(); }
+      if (e.key === 'ArrowRight' && currentIdx < ITEMS.length - 1) { currentIdx++; renderModal(); }
+    });
+
+    /* ─── Scroll reveal ─── */
+    (function () {
+      const reveals = document.querySelectorAll('[data-reveal]');
+      const delays = [0, 100, 180, 260, 320, 380, 440, 500];
+      let di = 0;
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            setTimeout(() => e.target.classList.add('visible'), delays[di++ % delays.length]);
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      reveals.forEach(el => obs.observe(el));
+    })();
+
+    /* ─── Masonry item staggered reveal ─── */
+    (function () {
+      const items = document.querySelectorAll('.masonry-item');
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const i = parseInt(e.target.getAttribute('data-index'));
+            setTimeout(() => e.target.classList.add('visible'), (i % 6) * 80);
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.08 });
+      items.forEach(el => obs.observe(el));
+    })();
+
+    /* ─── Magnetic hover ─── */
+    (function () {
+      document.querySelectorAll('[data-magnetic]').forEach(el => {
+        el.addEventListener('mousemove', e => {
+          const r = el.getBoundingClientRect();
+          el.style.transform = `translate(${(e.clientX - (r.left + r.width / 2)) * 0.18}px,${(e.clientY - (r.top + r.height / 2)) * 0.18}px)`;
+        });
+        el.addEventListener('mouseleave', () => {
+          el.style.transform = 'translate(0,0)';
+          el.style.transition = 'transform 0.4s cubic-bezier(0.23,1,0.32,1),opacity 0.6s,background 0.2s,border-color 0.2s';
+        });
+        el.addEventListener('mouseenter', () => {
+          el.style.transition = 'transform 0.1s ease,opacity 0.6s,background 0.2s,border-color 0.2s';
+        });
+      });
+    })();
+
+    /* ─── Cursor ─── */
+    (function () {
+      const dot = document.getElementById('cursor-dot');
+      const ring = document.getElementById('cursor-ring');
+      let rx = 0, ry = 0, mx = 0, my = 0;
+      document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx + 'px'; dot.style.top = my + 'px'; });
+      (function anim() { rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(anim); })();
+      document.querySelectorAll('a,[data-magnetic],button,.masonry-item').forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+      });
+    })();
+
+    /* ─── Particles (shared from main) ─── */
+    (function () {
+      const canvas = document.getElementById('particles');
+      const ctx = canvas.getContext('2d');
+      let W, H, particles = [], mouse = { x: -9999, y: -9999 };
+      const COUNT = 45;
+      const LINK_DIST = 130;
+      const PETAL_COLORS = ['#f7a8c4', '#f2bdd4', '#e87baa', '#f9c4d8', '#ec93bb'];
+      function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+      function rand(a, b) { return a + Math.random() * (b - a); }
+      function initP() {
+        const t = getTheme();
+        particles = [];
+        for (let i = 0; i < COUNT; i++) {
+          if (t === 'light') {
+            const isSakura = Math.random() < 0.4;
+            particles.push({ type: isSakura ? 'sakura' : 'petal', x: Math.random() * W, y: Math.random() * H, vx: rand(-0.15, 0.15), vy: rand(0.3, 0.85), r: isSakura ? rand(6, 11) : rand(5, 10), rot: rand(0, Math.PI * 2), rotSpeed: rand(-0.014, 0.014), wobble: rand(0, Math.PI * 2), wobbleSpeed: rand(0.018, 0.045), alpha: rand(0.4, 0.82), color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)] });
+          } else {
+            particles.push({ type: 'dot', x: Math.random() * W, y: Math.random() * H, vx: rand(-0.18, 0.18), vy: rand(-0.18, 0.18), r: rand(1.2, 2.2), alpha: rand(0.3, 0.7) });
+          }
+        }
+      }
+      function getTheme() { return document.documentElement.getAttribute('site-theme') || 'dark'; }
+      function lineColor() { const t = getTheme(); if (t === 'y2k') return '167,112,239'; if (t === 'light') return '212,83,126'; return '127,119,221'; }
+      function drawSakura(ctx, r, color, alpha) { ctx.globalAlpha = alpha; for (let i = 0; i < 5; i++) { ctx.save(); ctx.rotate((i / 5) * Math.PI * 2 - Math.PI / 2); const pw = r * 0.52; ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(pw, -r * 0.3, pw, -r * 0.85, 0, -r); ctx.bezierCurveTo(-pw, -r * 0.85, -pw, -r * 0.3, 0, 0); ctx.fillStyle = color; ctx.fill(); ctx.restore(); } ctx.beginPath(); ctx.arc(0, 0, r * 0.18, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,220,230,0.9)'; ctx.fill(); ctx.globalAlpha = 1; }
+      function drawSinglePetal(ctx, r, color, alpha) { ctx.globalAlpha = alpha; const pw = r * 0.52; ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(pw, -r * 0.3, pw, -r * 0.85, 0, -r); ctx.bezierCurveTo(-pw, -r * 0.85, -pw, -r * 0.3, 0, 0); ctx.fillStyle = color; ctx.fill(); ctx.globalAlpha = 1; }
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        const lc = lineColor();
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, d = Math.sqrt(dx * dx + dy * dy);
+            if (d < LINK_DIST) { ctx.beginPath(); ctx.strokeStyle = `rgba(${lc},${0.18 * (1 - d / LINK_DIST)})`; ctx.lineWidth = 0.6; ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke(); }
+          }
+          const mdx = particles[i].x - mouse.x, mdy = particles[i].y - mouse.y, md = Math.sqrt(mdx * mdx + mdy * mdy);
+          if (md < 180) { ctx.beginPath(); ctx.strokeStyle = `rgba(${lc},${0.28 * (1 - md / 180)})`; ctx.lineWidth = 0.7; ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke(); }
+        }
+        particles.forEach(p => {
+          ctx.save(); ctx.translate(p.x, p.y);
+          if (p.type === 'sakura') { ctx.rotate(p.rot); drawSakura(ctx, p.r, p.color, p.alpha); }
+          else if (p.type === 'petal') { ctx.rotate(p.rot); drawSinglePetal(ctx, p.r, p.color, p.alpha); }
+          else { ctx.beginPath(); ctx.arc(0, 0, p.r, 0, Math.PI * 2); ctx.fillStyle = `rgba(${lc},${p.alpha})`; ctx.fill(); }
+          ctx.restore();
+        });
+      }
+      function update() {
+        particles.forEach(p => {
+          if (p.type === 'sakura' || p.type === 'petal') { p.wobble += p.wobbleSpeed; p.x += p.vx + Math.sin(p.wobble) * 0.35; p.y += p.vy; p.rot += p.rotSpeed; if (p.y > H + 16) p.y = -16; if (p.x < -16) p.x = W + 16; if (p.x > W + 16) p.x = -16; }
+          else { p.x += p.vx; p.y += p.vy; if (p.x < 0) p.x = W; if (p.x > W) p.x = 0; if (p.y < 0) p.y = H; if (p.y > H) p.y = 0; }
+        });
+      }
+      let lastTheme = getTheme();
+      function loop() { const t = getTheme(); if (lastTheme !== t) { initP(); lastTheme = t; } update(); draw(); requestAnimationFrame(loop); }
+      window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+      window.addEventListener('resize', () => { resize(); initP(); });
+      resize(); initP(); loop();
+    })();
+
+    /* ─── Synthwave grid ─── */
+    let gridAnim = null;
+    function startGrid() {
+      const gc = document.getElementById('grid-canvas');
+      const ctx = gc.getContext('2d');
+      gc.width = window.innerWidth; gc.height = window.innerHeight;
+      let t = 0;
+      function draw() {
+        const W = gc.width, H = gc.height;
+        ctx.clearRect(0, 0, W, H); t += 0.0015;
+        const hz = H * 0.52;
+        const hg = ctx.createLinearGradient(0, hz - 40, 0, hz + 40);
+        hg.addColorStop(0, 'rgba(253,185,155,0)'); hg.addColorStop(0.5, 'rgba(253,185,155,0.2)'); hg.addColorStop(1, 'rgba(253,185,155,0)');
+        ctx.fillStyle = hg; ctx.fillRect(0, hz - 40, W, 80);
+        ctx.strokeStyle = 'rgba(167,112,239,0.28)'; ctx.lineWidth = 0.7;
+        for (let i = 0; i <= 14; i++) { const x = (i / 14) * W; ctx.beginPath(); ctx.moveTo(x, hz); ctx.lineTo(W / 2 + (x - W / 2) * 0.04, H); ctx.stroke(); }
+        for (let j = 0; j < 16; j++) {
+          const p = Math.pow(((j / 16 + t) % 1), 2.4), y = hz + p * (H - hz);
+          ctx.strokeStyle = `rgba(207,139,243,${0.08 + p * 0.28})`; ctx.lineWidth = 0.4 + p * 0.8;
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+        }
+        const sx = W / 2, sy = hz - 30, sr = 50;
+        const sg = ctx.createRadialGradient(sx, sy, 0, sx, sy, sr);
+        sg.addColorStop(0, 'rgba(253,185,155,0.85)'); sg.addColorStop(0.45, 'rgba(207,139,243,0.5)'); sg.addColorStop(1, 'rgba(167,112,239,0)');
+        ctx.fillStyle = sg; ctx.beginPath(); ctx.arc(sx, sy, sr, 0, Math.PI * 2); ctx.fill();
+        ctx.save(); ctx.beginPath(); ctx.arc(sx, sy, sr - 2, 0, Math.PI * 2); ctx.clip();
+        [0.38, 0.48, 0.57, 0.64, 0.70, 0.75, 0.80].forEach(f => { ctx.fillStyle = 'rgba(13,0,26,0.5)'; ctx.fillRect(sx - sr, sy - sr + f * sr * 2, sr * 2, 3 + f * 7); });
+        ctx.restore();
+        gridAnim = requestAnimationFrame(draw);
+      }
+      draw();
+    }
+    function stopGrid() {
+      if (gridAnim) { cancelAnimationFrame(gridAnim); gridAnim = null; }
+      const gc = document.getElementById('grid-canvas');
+      if (gc) gc.getContext('2d').clearRect(0, 0, gc.width, gc.height);
+    }
+    window.addEventListener('resize', () => { const gc = document.getElementById('grid-canvas'); gc.width = window.innerWidth; gc.height = window.innerHeight; });
+  </script>
+</body>
+
+</html>
