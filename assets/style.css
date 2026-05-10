@@ -179,7 +179,7 @@ body.hovering #cursor-ring {
 }
 
 #bio-cycler {
-    font-size: 18px;
+    font-size: 36px;
     font-weight: 500;
     cursor: none;
     transition: opacity 0.2s;
@@ -482,11 +482,6 @@ main {
     border-color: rgba(29, 158, 117, 0.2);
 }
 
-.link-icon.coral {
-    background: rgba(216, 90, 48, 0.12);
-    border-color: rgba(216, 90, 48, 0.2);
-}
-
 .link-icon.amber {
     background: rgba(186, 117, 23, 0.12);
     border-color: rgba(186, 117, 23, 0.2);
@@ -576,6 +571,11 @@ footer {
 
 footer.visible {
     opacity: 1;
+}
+
+.footer-link {
+    color: var(--accent);
+    text-decoration: none;
 }
 
 [site-theme="y2k"] footer {
