@@ -466,6 +466,29 @@
       font-size: 11px;
       letter-spacing: 0.1em;
     }
+
+    /* ─── NSFW blur / warning ─── */
+    .masonry-item.nsfw .masonry-img-wrap img,
+    .masonry-item.nsfw .masonry-img-wrap .placeholder-img { filter: blur(14px); }
+
+    .nsfw-mask {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.35);
+      color: #fff; font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.08em; pointer-events: none;
+    }
+
+    .nsfw-blur { filter: blur(20px); }
+
+    .nsfw-reveal {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.5);
+      color: #fff; font-size: 0.88rem; font-weight: 600;
+      letter-spacing: 0.05em; cursor: pointer; z-index: 2;
+    }
+    .nsfw-reveal:hover { background: rgba(0,0,0,0.62); }
   </style>
 </head>
 
@@ -575,7 +598,7 @@
       { title: 'Rabbit Form', artist: 'art by @softstroke', src: null, fullSrc: '#', ph: { h: 360, stops: ['#ffecd2', '#fcb69f'] } },
       { title: 'Rave Witch', artist: 'art by @glitchpixel', src: null, fullSrc: '#', ph: { h: 310, stops: ['#6a3093', '#a044ff'] } },
       { title: 'Quiet Signal', artist: 'art by @waveform_au', src: null, fullSrc: '#', ph: { h: 400, stops: ['#141e30', '#243b55'] } },
-      { title: 'Peach Protocol', artist: 'art by @pastelcore', src: null, fullSrc: '#', ph: { h: 270, stops: ['#fbd3e9', '#bb377d'] } },
+      { title: 'Peach Protocol', artist: 'art by @pastelcore', src: null, fullSrc: '#', ph: { h: 270, stops: ['#fbd3e9', '#bb377d'] }, nsfw: true },
       { title: 'Cyber Garden', artist: 'art by @green_grid', src: null, fullSrc: '#', ph: { h: 350, stops: ['#134e5e', '#71b280'] } },
       { title: 'Overclocked Dream', artist: 'art by @neonscribe', src: null, fullSrc: '#', ph: { h: 280, stops: ['#f7971e', '#ffd200'] } },
     ];
@@ -619,9 +642,10 @@
       const imgHTML = item.src
         ? `<img src="${item.src}" alt="${item.title}" loading="lazy" />`
         : makePlaceholderSVG(thumbW, thumbH, item.ph.stops);
+      if (item.nsfw) el.classList.add('nsfw');
       el.innerHTML = `
     <div class="masonry-item-inner">
-      <div class="masonry-img-wrap">${imgHTML}</div>
+      <div class="masonry-img-wrap">${imgHTML}${item.nsfw ? '<div class="nsfw-mask"><span>⚠ NSFW</span></div>' : ''}</div>
       <div class="masonry-meta">
         <strong>${item.title}</strong>
         <span>${item.artist}</span>
@@ -656,9 +680,11 @@
 
     function renderModal() {
       const item = ITEMS[currentIdx];
-      // remove old image/svg
+      // remove old image/svg and any nsfw reveal overlay
       const old = modalImgArea.querySelector('img, svg.modal-placeholder');
       if (old) old.remove();
+      const oldReveal = document.getElementById('nsfwReveal');
+      if (oldReveal) oldReveal.remove();
       // insert new
       const imgEl = item.src
         ? Object.assign(document.createElement('img'), { src: item.src, alt: item.title })
@@ -667,6 +693,18 @@
           tmp.innerHTML = makeModalPlaceholder(item.ph.stops);
           return tmp.firstElementChild;
         })();
+      if (item.nsfw) {
+        imgEl.classList.add('nsfw-blur');
+        const reveal = document.createElement('div');
+        reveal.id = 'nsfwReveal';
+        reveal.className = 'nsfw-reveal';
+        reveal.innerHTML = '<span>⚠ NSFW — click to reveal</span>';
+        reveal.addEventListener('click', () => {
+          imgEl.classList.remove('nsfw-blur');
+          reveal.remove();
+        });
+        modalImgArea.insertBefore(reveal, modalImgArea.firstChild);
+      }
       modalImgArea.insertBefore(imgEl, modalImgArea.firstChild);
       modalTitle.textContent = item.title;
       modalArtist.textContent = item.artist;
