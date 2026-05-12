@@ -1,0 +1,14 @@
+[
+  { "title": "Starlit Wanderer", "artist": "art by @artist_one", "src": null, "fullSrc": "#", "ph": { "h": 340, "stops": ["#9b59b6", "#2c3e50"] } },
+  { "title": "Neon Bloom", "artist": "art by @pixel_flora", "src": null, "fullSrc": "#", "ph": { "h": 260, "stops": ["#e84393", "#ff8c42"] } },
+  { "title": "Void Familiar", "artist": "art by @inkdreamer", "src": null, "fullSrc": "#", "ph": { "h": 420, "stops": ["#1a1a2e", "#e94560"] } },
+  { "title": "Sakura Circuit", "artist": "art by @cyberbloom", "src": null, "fullSrc": "#", "ph": { "h": 300, "stops": ["#f7a8c4", "#c471ed"] } },
+  { "title": "Lo-fi Horizon", "artist": "art by @dusk_render", "src": null, "fullSrc": "#", "ph": { "h": 380, "stops": ["#0f3460", "#533483"] } },
+  { "title": "Mech Study No.4", "artist": "art by @steelpen", "src": null, "fullSrc": "#", "ph": { "h": 290, "stops": ["#2c3e50", "#4ca1af"] } },
+  { "title": "Rabbit Form", "artist": "art by @softstroke", "src": null, "fullSrc": "#", "ph": { "h": 360, "stops": ["#ffecd2", "#fcb69f"] } },
+  { "title": "Rave Witch", "artist": "art by @glitchpixel", "src": null, "fullSrc": "#", "ph": { "h": 310, "stops": ["#6a3093", "#a044ff"] } },
+  { "title": "Quiet Signal", "artist": "art by @waveform_au", "src": null, "fullSrc": "#", "ph": { "h": 400, "stops": ["#141e30", "#243b55"] } },
+  { "title": "Peach Protocol", "artist": "art by @pastelcore", "src": null, "fullSrc": "#", "ph": { "h": 270, "stops": ["#fbd3e9", "#bb377d"] }, "nsfw": true },
+  { "title": "Cyber Garden", "artist": "art by @green_grid", "src": null, "fullSrc": "#", "ph": { "h": 350, "stops": ["#134e5e", "#71b280"] } },
+  { "title": "Overclocked Dream", "artist": "art by @neonscribe", "src": null, "fullSrc": "#", "ph": { "h": 280, "stops": ["#f7971e", "#ffd200"] } }
+]

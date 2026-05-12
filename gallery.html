@@ -585,25 +585,13 @@
       if (currentTheme === 'y2k') startGrid(); else stopGrid();
     });
 
-    /* ─── Gallery data ─── */
-    // Replace src with real image paths & fullSrc with full-res URLs when ready.
-    // Heights are used to generate SVG placeholder colours — remove once real images added.
-    const ITEMS = [
-      { title: 'Starlit Wanderer', artist: 'art by @artist_one', src: null, fullSrc: '#', ph: { h: 340, stops: ['#9b59b6', '#2c3e50'] } },
-      { title: 'Neon Bloom', artist: 'art by @pixel_flora', src: null, fullSrc: '#', ph: { h: 260, stops: ['#e84393', '#ff8c42'] } },
-      { title: 'Void Familiar', artist: 'art by @inkdreamer', src: null, fullSrc: '#', ph: { h: 420, stops: ['#1a1a2e', '#e94560'] } },
-      { title: 'Sakura Circuit', artist: 'art by @cyberbloom', src: null, fullSrc: '#', ph: { h: 300, stops: ['#f7a8c4', '#c471ed'] } },
-      { title: 'Lo-fi Horizon', artist: 'art by @dusk_render', src: null, fullSrc: '#', ph: { h: 380, stops: ['#0f3460', '#533483'] } },
-      { title: 'Mech Study No.4', artist: 'art by @steelpen', src: null, fullSrc: '#', ph: { h: 290, stops: ['#2c3e50', '#4ca1af'] } },
-      { title: 'Rabbit Form', artist: 'art by @softstroke', src: null, fullSrc: '#', ph: { h: 360, stops: ['#ffecd2', '#fcb69f'] } },
-      { title: 'Rave Witch', artist: 'art by @glitchpixel', src: null, fullSrc: '#', ph: { h: 310, stops: ['#6a3093', '#a044ff'] } },
-      { title: 'Quiet Signal', artist: 'art by @waveform_au', src: null, fullSrc: '#', ph: { h: 400, stops: ['#141e30', '#243b55'] } },
-      { title: 'Peach Protocol', artist: 'art by @pastelcore', src: null, fullSrc: '#', ph: { h: 270, stops: ['#fbd3e9', '#bb377d'] }, nsfw: true },
-      { title: 'Cyber Garden', artist: 'art by @green_grid', src: null, fullSrc: '#', ph: { h: 350, stops: ['#134e5e', '#71b280'] } },
-      { title: 'Overclocked Dream', artist: 'art by @neonscribe', src: null, fullSrc: '#', ph: { h: 280, stops: ['#f7971e', '#ffd200'] } },
-    ];
+    /* ─── Load gallery data then build grid ─── */
+    let ITEMS = [];
 
-    /* ─── Build masonry grid ─── */
+    fetch('gallery.json')
+      .then(r => r.json())
+      .then(data => { ITEMS = data; buildGallery(); });
+
     function makePlaceholderSVG(w, h, stops) {
       const id = 'g' + Math.random().toString(36).slice(2, 7);
       return `<svg class="placeholder-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">
@@ -632,18 +620,19 @@
   </svg>`;
     }
 
-    const masonry = document.getElementById('masonry');
-    ITEMS.forEach((item, i) => {
-      const el = document.createElement('div');
-      el.className = 'masonry-item';
-      el.setAttribute('data-index', i);
-      const thumbW = 400;
-      const thumbH = item.ph.h;
-      const imgHTML = item.src
-        ? `<img src="${item.src}" alt="${item.title}" loading="lazy" />`
-        : makePlaceholderSVG(thumbW, thumbH, item.ph.stops);
-      if (item.nsfw) el.classList.add('nsfw');
-      el.innerHTML = `
+    function buildGallery() {
+      const masonry = document.getElementById('masonry');
+      ITEMS.forEach((item, i) => {
+        const el = document.createElement('div');
+        el.className = 'masonry-item';
+        el.setAttribute('data-index', i);
+        const thumbW = 400;
+        const thumbH = item.ph.h;
+        const imgHTML = item.src
+          ? `<img src="${item.src}" alt="${item.title}" loading="lazy" />`
+          : makePlaceholderSVG(thumbW, thumbH, item.ph.stops);
+        if (item.nsfw) el.classList.add('nsfw');
+        el.innerHTML = `
     <div class="masonry-item-inner">
       <div class="masonry-img-wrap">${imgHTML}${item.nsfw ? '<div class="nsfw-mask"><span>⚠ NSFW</span></div>' : ''}</div>
       <div class="masonry-meta">
@@ -651,9 +640,29 @@
         <span>${item.artist}</span>
       </div>
     </div>`;
-      masonry.appendChild(el);
-      el.addEventListener('click', () => openModal(i));
-    });
+        masonry.appendChild(el);
+        el.addEventListener('click', () => openModal(i));
+      });
+
+      // re-run staggered reveal for newly added items
+      const items = masonry.querySelectorAll('.masonry-item');
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const i = parseInt(e.target.getAttribute('data-index'));
+            setTimeout(() => e.target.classList.add('visible'), (i % 6) * 80);
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.08 });
+      items.forEach(el => obs.observe(el));
+
+      // cursor hover for new items
+      items.forEach(el => {
+        el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+        el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+      });
+    }
 
     /* ─── Modal ─── */
     const backdrop = document.getElementById('modalBackdrop');
@@ -746,21 +755,6 @@
         });
       }, { threshold: 0.1 });
       reveals.forEach(el => obs.observe(el));
-    })();
-
-    /* ─── Masonry item staggered reveal ─── */
-    (function () {
-      const items = document.querySelectorAll('.masonry-item');
-      const obs = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            const i = parseInt(e.target.getAttribute('data-index'));
-            setTimeout(() => e.target.classList.add('visible'), (i % 6) * 80);
-            obs.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.08 });
-      items.forEach(el => obs.observe(el));
     })();
 
     /* ─── Magnetic hover ─── */
