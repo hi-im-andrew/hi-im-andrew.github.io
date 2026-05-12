@@ -1,25 +1,71 @@
 [
-  { "title": "Starlit Wanderer", "artist": "art by @artist_one", "src": null, "ph": { "h": 340, "stops": ["#9b59b6", "#2c3e50"] } },
-  { "title": "Neon Bloom", "artist": "art by @pixel_flora", "src": null, "ph": { "h": 260, "stops": ["#e84393", "#ff8c42"] },
+  {
+    "title": "3.17.26",
+    "artist": "art by @Blimaxxx",
+    "src": "https://cdn.bnuuy.club/cdn/images/blimax-casual-3-17-26.webp",
     "album": [
-      { "src": null, "ph": { "h": 260, "stops": ["#e84393", "#ff8c42"] } },
-      { "src": null, "ph": { "h": 310, "stops": ["#ff8c42", "#f7971e"] } },
-      { "src": null, "ph": { "h": 280, "stops": ["#e84393", "#c471ed"] } }
+      {
+        "src": "https://cdn.bnuuy.club/cdn/images/blimax-casual-3-17-26.webp"
+      },
+      {
+        "src": "https://cdn.bnuuy.club/cdn/images/blimax-spicy-3-17-26.webp"
+      },
+      {
+        "src": "https://cdn.bnuuy.club/cdn/images/blimax-nude-3-17-26.webp",
+        "nsfw": true
+      }
     ]
   },
-  { "title": "Void Familiar", "artist": "art by @inkdreamer", "src": null, "ph": { "h": 420, "stops": ["#1a1a2e", "#e94560"] } },
-  { "title": "Sakura Circuit", "artist": "art by @cyberbloom", "src": null, "ph": { "h": 300, "stops": ["#f7a8c4", "#c471ed"] } },
-  { "title": "Lo-fi Horizon", "artist": "art by @dusk_render", "src": null, "ph": { "h": 380, "stops": ["#0f3460", "#533483"] } },
-  { "title": "Mech Study No.4", "artist": "art by @steelpen", "src": null, "ph": { "h": 290, "stops": ["#2c3e50", "#4ca1af"] } },
-  { "title": "Rabbit Form", "artist": "art by @softstroke", "src": null, "ph": { "h": 360, "stops": ["#ffecd2", "#fcb69f"] },
+  {
+    "title": "11.28.25",
+    "artist": "art by @Louu_Heroo",
+    "src": "https://cdn.bnuuy.club/cdn/images/louuheroo-11-28-25.webp"
+  },
+  {
+    "title": "11.21.25",
+    "artist": "art by @Louu_Heroo",
+    "src": "https://cdn.bnuuy.club/cdn/images/louuheroo-11-21-25.webp"
+  },
+  {
+    "title": "4.15.25",
+    "artist": "art by @_Aruiu",
+    "src": "https://cdn.bnuuy.club/cdn/images/aru-magenta-alt-4-15-25.webp",
+    "nsfw": true,
     "album": [
-      { "src": null, "ph": { "h": 360, "stops": ["#ffecd2", "#fcb69f"] } },
-      { "src": null, "ph": { "h": 290, "stops": ["#fcb69f", "#f7a8c4"] } }
+      {
+        "src": "https://cdn.bnuuy.club/cdn/images/aru-magenta-4-15-25.webp"
+      },
+      {
+        "src": "https://cdn.bnuuy.club/cdn/images/aru-magenta-alt-4-15-25.webp"
+      },
+      {
+        "src": "https://cdn.bnuuy.club/cdn/images/aru-purple-4-15-25.webp"
+      },
+      {
+        "src": "https://cdn.bnuuy.club/cdn/images/aru-purple-alt-4-15-25.webp"
+      },
+      {
+        "src": "https://cdn.bnuuy.club/cdn/images/aru-red-4-15-25.webp"
+      },
+      {
+        "src": "https://cdn.bnuuy.club/cdn/images/aru-red-alt-4-15-25.webp"
+      }
     ]
   },
-  { "title": "Rave Witch", "artist": "art by @glitchpixel", "src": null, "ph": { "h": 310, "stops": ["#6a3093", "#a044ff"] } },
-  { "title": "Quiet Signal", "artist": "art by @waveform_au", "src": null, "ph": { "h": 400, "stops": ["#141e30", "#243b55"] } },
-  { "title": "Peach Protocol", "artist": "art by @pastelcore", "src": null, "ph": { "h": 270, "stops": ["#fbd3e9", "#bb377d"] } },
-  { "title": "6.14.2024", "artist": "art by @Brassica_18", "src": "https://cdn.bnuuy.club/cdn/images/brassica-6-14-24.jpg", "nsfw": true },
-  { "title": "2.18.2024 skeb", "artist": "art by @anagumasan_", "src": "https://cdn.bnuuy.club/cdn/images/skeb-2-18-24.webp" }
+  {
+    "title": "2.18.25 bday comm",
+    "artist": "art by @ren_rentya",
+    "src": "https://cdn.bnuuy.club/cdn/images/rentya-2-18-25.webp"
+  },
+  {
+    "title": "6.14.2024",
+    "artist": "art by @Brassica_18",
+    "src": "https://cdn.bnuuy.club/cdn/images/brassica-6-14-24.jpg",
+    "nsfw": true
+  },
+  {
+    "title": "2.18.2024 skeb",
+    "artist": "art by @anagumasan_",
+    "src": "https://cdn.bnuuy.club/cdn/images/skeb-2-18-24.webp"
+  }
 ]
