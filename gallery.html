@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>art gallery · dru's domain</title>
   <link rel="stylesheet" href="assets/style.css" />
+  <script>document.documentElement.setAttribute('site-theme',localStorage.getItem('theme')||'dark');</script>
   <style>
     /* Fix: body needs position:relative so body::before z-index:-2 stacks correctly */
     body {
@@ -576,11 +577,15 @@
       light: '<img src="assets/icons/theme-light.png" alt="light mode" />',
       y2k: '<img src="assets/icons/theme-y2k.png"   alt="y2k mode"  />'
     };
-    let currentTheme = 'dark';
+    let gridAnim = null;
+    let currentTheme = root.getAttribute('site-theme') || 'dark';
+    document.getElementById('toggleBtn').innerHTML = ICONS[currentTheme];
+    if (currentTheme === 'y2k') startGrid();
     document.getElementById('toggleBtn').addEventListener('click', () => {
       const toIdx = (THEMES.indexOf(currentTheme) + 1) % THEMES.length;
       currentTheme = THEMES[toIdx];
       root.setAttribute('site-theme', currentTheme);
+      localStorage.setItem('theme', currentTheme);
       document.getElementById('toggleBtn').innerHTML = ICONS[currentTheme];
       if (currentTheme === 'y2k') startGrid(); else stopGrid();
     });
@@ -846,7 +851,6 @@
     })();
 
     /* ─── Synthwave grid ─── */
-    let gridAnim = null;
     function startGrid() {
       const gc = document.getElementById('grid-canvas');
       const ctx = gc.getContext('2d');
