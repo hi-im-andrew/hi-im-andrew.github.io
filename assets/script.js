@@ -5,7 +5,9 @@ const ICONS = {
   light: '<img src="assets/icons/theme-light.png" alt="light mode" />',
   y2k:   '<img src="assets/icons/theme-y2k.png"   alt="y2k mode"  />'
 };
-let currentTheme = 'dark';
+let currentTheme = root.getAttribute('site-theme') || 'dark';
+document.getElementById('toggleBtn').innerHTML = ICONS[currentTheme];
+if (currentTheme === 'y2k') startGrid();
 
 document.getElementById('toggleBtn').addEventListener('click', () => {
   const toIdx = (THEMES.indexOf(currentTheme) + 1) % THEMES.length;
