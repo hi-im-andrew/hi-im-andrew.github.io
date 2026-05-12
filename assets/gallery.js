@@ -226,14 +226,18 @@ function createGalleryView(config) {
             return tmp.firstElementChild;
           })();
 
-        if (item.nsfw && !revealedItems.has(currentIdx)) {
+        const photoKey     = `${currentIdx}-${albumIdx}`;
+        const parentIsNsfw = item.nsfw && !revealedItems.has(currentIdx);
+        const photoIsNsfw  = hasAlbum && item.album[albumIdx].nsfw && !revealedItems.has(photoKey);
+
+        if (parentIsNsfw || photoIsNsfw) {
           imgEl.classList.add('nsfw-blur');
           const reveal = document.createElement('div');
           reveal.id = 'nsfwReveal';
           reveal.className = 'nsfw-reveal';
           reveal.innerHTML = '<span>⚠ NSFW — click to reveal</span>';
           reveal.addEventListener('click', () => {
-            revealedItems.add(currentIdx);
+            revealedItems.add(parentIsNsfw ? currentIdx : photoKey);
             imgEl.classList.remove('nsfw-blur');
             reveal.remove();
           });
