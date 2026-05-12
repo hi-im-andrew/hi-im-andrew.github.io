@@ -143,7 +143,7 @@ function createGalleryView(config) {
   <div class="masonry-img-wrap">${imgHTML}${item.nsfw ? '<div class="nsfw-mask"><span>⚠ NSFW</span></div>' : ''}${item.album ? `<div class="album-badge">${item.album.length}</div>` : ''}</div>
   <div class="masonry-meta">
     <strong>${item.title}</strong>
-    <span>${item.artist}</span>
+    <span>${item.description}</span>
   </div>
 </div>`;
           masonry.appendChild(el);
@@ -247,7 +247,7 @@ function createGalleryView(config) {
 
         imgArea.insertBefore(imgEl, imgArea.firstChild);
         titleEl.textContent  = item.title;
-        artistEl.textContent = item.artist;
+        artistEl.textContent = item.description;
 
         // Gallery prev/next
         prevBtn.style.opacity = currentIdx === 0 ? '0.35' : '1';

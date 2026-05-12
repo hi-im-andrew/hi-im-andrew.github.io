@@ -1,7 +1,7 @@
 [
   {
     "title": "3.17.26",
-    "artist": "art by @Blimaxxx",
+    "description": "art by @Blimaxxx",
     "src": "https://cdn.bnuuy.club/cdn/images/blimax-casual-3-17-26.webp",
     "thumbnail": "https://cdn.bnuuy.club/cdn/images/blimax-casual-3-17-26-thumb.webp",
     "album": [
@@ -19,19 +19,19 @@
   },
   {
     "title": "11.28.25",
-    "artist": "art by @Louu_Heroo",
+    "description": "art by @Louu_Heroo",
     "src": "https://cdn.bnuuy.club/cdn/images/louuheroo-11-28-25.webp",
     "thumbnail": "https://cdn.bnuuy.club/cdn/images/louuheroo-11-28-25-thumb.webp"
   },
   {
     "title": "11.21.25",
-    "artist": "art by @Louu_Heroo",
+    "description": "art by @Louu_Heroo",
     "src": "https://cdn.bnuuy.club/cdn/images/louuheroo-11-21-25.webp",
     "thumbnail": "https://cdn.bnuuy.club/cdn/images/louuheroo-11-21-25-thumb.webp"
   },
   {
     "title": "4.15.25",
-    "artist": "art by @_Aruiu",
+    "description": "art by @_Aruiu",
     "src": "https://cdn.bnuuy.club/cdn/images/aru-magenta-alt-4-15-25.webp",
     "thumbnail": "https://cdn.bnuuy.club/cdn/images/aru-magenta-alt-4-15-25-thumb.webp",
     "nsfw": true,
@@ -58,20 +58,20 @@
   },
   {
     "title": "2.18.25 bday comm",
-    "artist": "art by @ren_rentya",
+    "description": "art by @ren_rentya",
     "src": "https://cdn.bnuuy.club/cdn/images/rentya-2-18-25.webp",
     "thumbnail": "https://cdn.bnuuy.club/cdn/images/rentya-2-18-25-thumb.webp"
   },
   {
     "title": "6.14.2024",
-    "artist": "art by @Brassica_18",
+    "description": "art by @Brassica_18",
     "src": "https://cdn.bnuuy.club/cdn/images/brassica-6-14-24.jpg",
     "thumbnail": "https://cdn.bnuuy.club/cdn/images/brassica-6-14-24-thumb.webp",
     "nsfw": true
   },
   {
     "title": "2.18.2024 skeb",
-    "artist": "art by @anagumasan_",
+    "description": "art by @anagumasan_",
     "src": "https://cdn.bnuuy.club/cdn/images/skeb-2-18-24.webp",
     "thumbnail": "https://cdn.bnuuy.club/cdn/images/skeb-2-18-24-thumb.webp"
   }
