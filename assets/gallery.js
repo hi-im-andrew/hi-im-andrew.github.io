@@ -133,8 +133,9 @@ function createGalleryView(config) {
           const el = document.createElement('div');
           el.className = 'masonry-item';
           el.setAttribute('data-index', i);
-          const imgHTML = item.src
-            ? `<img src="${item.src}" alt="${item.title}" loading="lazy" />`
+          const thumbSrc = item.thumbnail || item.src;
+          const imgHTML = thumbSrc
+            ? `<img src="${thumbSrc}" alt="${item.title}" loading="lazy" />`
             : makePlaceholderSVG(400, item.ph.h, item.ph.stops);
           if (item.nsfw) el.classList.add('nsfw');
           el.innerHTML = `
