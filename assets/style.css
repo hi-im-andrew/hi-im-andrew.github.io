@@ -935,37 +935,34 @@ footer.visible {
     color: rgba(253, 185, 155, 0.6);
 }
 
-.modal-view-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    background: var(--surface-hover);
-    border: 1px solid var(--border-hover);
-    border-radius: 9px;
-    padding: 8px 14px;
-    color: var(--accent);
-    text-decoration: none;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: none;
-    white-space: nowrap;
-    transition: background 0.2s, border-color 0.2s, transform 0.15s, border-radius 0.3s;
-}
-
-.modal-view-btn:hover {
-    background: var(--surface);
-    transform: scale(1.04);
-}
-
-.modal-view-btn svg { flex-shrink: 0; }
-
-[site-theme="y2k"] .modal-view-btn {
-    border-radius: 0;
-    font-family: 'Courier New', monospace;
+.album-badge {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: #fff;
     font-size: 11px;
-    letter-spacing: 0.06em;
-    color: #FDB99B;
-    border-color: #A770EF;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+    pointer-events: none;
+}
+
+[site-theme="y2k"] .album-badge {
+    border-radius: 0;
+    background: rgba(13, 0, 26, 0.7);
+    border: 1px solid rgba(167, 112, 239, 0.5);
+    color: #CF8BF3;
+}
+
+.modal-counter {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .modal-nav {

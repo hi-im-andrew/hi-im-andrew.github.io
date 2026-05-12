@@ -50,12 +50,7 @@ function createGalleryView(config) {
         <strong id="modalTitle">—</strong>
         <span id="modalArtist">—</span>
       </div>
-      <a href="#" id="modalViewBtn" class="modal-view-btn" target="_blank" rel="noopener" data-magnetic>
-        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M2 11L11 2M5 2h6v6"/>
-        </svg>
-        view full image
-      </a>
+      <span id="modalCounter" class="modal-counter"></span>
     </div>
   </div>
 </div>`;
@@ -67,6 +62,8 @@ function createGalleryView(config) {
       let ITEMS = [];
       let masonryObs = null;
       let currentIdx = 0;
+      let albumIdx = 0;
+      let inAlbum = false;
 
       // ── Placeholder SVG generators ──
 
@@ -112,7 +109,7 @@ function createGalleryView(config) {
           if (item.nsfw) el.classList.add('nsfw');
           el.innerHTML = `
 <div class="masonry-item-inner">
-  <div class="masonry-img-wrap">${imgHTML}${item.nsfw ? '<div class="nsfw-mask"><span>⚠ NSFW</span></div>' : ''}</div>
+  <div class="masonry-img-wrap">${imgHTML}${item.nsfw ? '<div class="nsfw-mask"><span>⚠ NSFW</span></div>' : ''}${item.album ? `<div class="album-badge">${item.album.length}</div>` : ''}</div>
   <div class="masonry-meta">
     <strong>${item.title}</strong>
     <span>${item.artist}</span>
@@ -147,13 +144,15 @@ function createGalleryView(config) {
       const imgArea    = document.getElementById('modalImgArea');
       const titleEl    = document.getElementById('modalTitle');
       const artistEl   = document.getElementById('modalArtist');
-      const viewBtn    = document.getElementById('modalViewBtn');
+      const counterEl  = document.getElementById('modalCounter');
       const closeBtn   = document.getElementById('modalClose');
       const prevBtn    = document.getElementById('modalPrev');
       const nextBtn    = document.getElementById('modalNext');
 
       function openModal(idx) {
         currentIdx = idx;
+        inAlbum = !!ITEMS[idx].album;
+        albumIdx = 0;
         renderModal();
         backdrop.classList.add('open');
         document.body.style.overflow = 'hidden';
@@ -171,11 +170,14 @@ function createGalleryView(config) {
         const oldReveal = document.getElementById('nsfwReveal');
         if (oldReveal) oldReveal.remove();
 
-        const imgEl = item.src
-          ? Object.assign(document.createElement('img'), { src: item.src, alt: item.title })
+        const displaySrc = inAlbum ? item.album[albumIdx].src : item.src;
+        const displayPh  = inAlbum ? item.album[albumIdx].ph  : item.ph;
+
+        const imgEl = displaySrc
+          ? Object.assign(document.createElement('img'), { src: displaySrc, alt: item.title })
           : (() => {
             const tmp = document.createElement('div');
-            tmp.innerHTML = makeModalPlaceholder(item.ph.stops);
+            tmp.innerHTML = makeModalPlaceholder(displayPh.stops);
             return tmp.firstElementChild;
           })();
 
@@ -192,22 +194,42 @@ function createGalleryView(config) {
         imgArea.insertBefore(imgEl, imgArea.firstChild);
         titleEl.textContent  = item.title;
         artistEl.textContent = item.artist;
-        viewBtn.href         = item.src || item.fullSrc;
-        viewBtn.style.opacity = item.fullSrc === '#' ? '0.45' : '1';
-        prevBtn.style.opacity = currentIdx === 0 ? '0.35' : '1';
-        nextBtn.style.opacity = currentIdx === ITEMS.length - 1 ? '0.35' : '1';
+
+        if (inAlbum) {
+          counterEl.textContent = `${albumIdx + 1} / ${item.album.length}`;
+          prevBtn.style.opacity = albumIdx === 0 ? '0.35' : '1';
+          nextBtn.style.opacity = albumIdx === item.album.length - 1 ? '0.35' : '1';
+        } else {
+          counterEl.textContent = '';
+          prevBtn.style.opacity = currentIdx === 0 ? '0.35' : '1';
+          nextBtn.style.opacity = currentIdx === ITEMS.length - 1 ? '0.35' : '1';
+        }
       }
 
       closeBtn.addEventListener('click', closeModal);
       backdrop.addEventListener('click', e => { if (e.target === backdrop) closeModal(); });
-      prevBtn.addEventListener('click', e => { e.stopPropagation(); if (currentIdx > 0) { currentIdx--; renderModal(); } });
-      nextBtn.addEventListener('click', e => { e.stopPropagation(); if (currentIdx < ITEMS.length - 1) { currentIdx++; renderModal(); } });
+      prevBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        if (inAlbum) { if (albumIdx > 0) { albumIdx--; renderModal(); } }
+        else { if (currentIdx > 0) { currentIdx--; renderModal(); } }
+      });
+      nextBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        if (inAlbum) { if (albumIdx < ITEMS[currentIdx].album.length - 1) { albumIdx++; renderModal(); } }
+        else { if (currentIdx < ITEMS.length - 1) { currentIdx++; renderModal(); } }
+      });
 
       const keyHandler = e => {
         if (!backdrop.classList.contains('open')) return;
         if (e.key === 'Escape') closeModal();
-        if (e.key === 'ArrowLeft'  && currentIdx > 0)               { currentIdx--; renderModal(); }
-        if (e.key === 'ArrowRight' && currentIdx < ITEMS.length - 1) { currentIdx++; renderModal(); }
+        if (e.key === 'ArrowLeft') {
+          if (inAlbum) { if (albumIdx > 0) { albumIdx--; renderModal(); } }
+          else { if (currentIdx > 0) { currentIdx--; renderModal(); } }
+        }
+        if (e.key === 'ArrowRight') {
+          if (inAlbum) { if (albumIdx < ITEMS[currentIdx].album.length - 1) { albumIdx++; renderModal(); } }
+          else { if (currentIdx < ITEMS.length - 1) { currentIdx++; renderModal(); } }
+        }
       };
       document.addEventListener('keydown', keyHandler);
 
