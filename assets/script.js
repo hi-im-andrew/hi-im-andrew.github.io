@@ -5,18 +5,26 @@ const ICONS = {
   light: '<img src="assets/icons/theme-light.png" alt="light mode" />',
   y2k:   '<img src="assets/icons/theme-y2k.png"   alt="y2k mode"  />'
 };
-let currentTheme = 'dark';
+let gridAnim = null;
+let currentTheme = root.getAttribute('site-theme') || 'dark';
+if (currentTheme === 'y2k') startGrid();
 
-document.getElementById('toggleBtn').addEventListener('click', () => {
-  const toIdx = (THEMES.indexOf(currentTheme) + 1) % THEMES.length;
-  currentTheme = THEMES[toIdx];
-  root.setAttribute('site-theme', currentTheme);
-  document.getElementById('toggleBtn').innerHTML = ICONS[currentTheme];
-  if (currentTheme === 'y2k') startGrid(); else stopGrid();
-});
+// Called after each view renders to wire up the toggle button in that view.
+function initToggle() {
+  const btn = document.getElementById('toggleBtn');
+  if (!btn) return;
+  btn.innerHTML = ICONS[currentTheme];
+  btn.addEventListener('click', () => {
+    const toIdx = (THEMES.indexOf(currentTheme) + 1) % THEMES.length;
+    currentTheme = THEMES[toIdx];
+    root.setAttribute('site-theme', currentTheme);
+    localStorage.setItem('theme', currentTheme);
+    btn.innerHTML = ICONS[currentTheme];
+    if (currentTheme === 'y2k') startGrid(); else stopGrid();
+  });
+}
 
 // --- Synthwave grid ---
-let gridAnim = null;
 function startGrid() {
   const gc = document.getElementById('grid-canvas');
   const ctx = gc.getContext('2d');
@@ -29,7 +37,6 @@ function startGrid() {
     t += 0.0015;
     const hz = H * 0.52;
 
-    // Horizon glow
     const hg = ctx.createLinearGradient(0, hz - 40, 0, hz + 40);
     hg.addColorStop(0,   'rgba(253,185,155,0)');
     hg.addColorStop(0.5, 'rgba(253,185,155,0.2)');
@@ -37,7 +44,6 @@ function startGrid() {
     ctx.fillStyle = hg;
     ctx.fillRect(0, hz - 40, W, 80);
 
-    // Vertical lines
     ctx.strokeStyle = 'rgba(167,112,239,0.28)';
     ctx.lineWidth = 0.7;
     for (let i = 0; i <= 14; i++) {
@@ -48,7 +54,6 @@ function startGrid() {
       ctx.stroke();
     }
 
-    // Horizontal lines
     for (let j = 0; j < 16; j++) {
       const p = Math.pow(((j / 16 + t) % 1), 2.4);
       const y = hz + p * (H - hz);
@@ -60,7 +65,6 @@ function startGrid() {
       ctx.stroke();
     }
 
-    // Sun
     const sx = W / 2, sy = hz - 30, sr = 50;
     const sg = ctx.createRadialGradient(sx, sy, 0, sx, sy, sr);
     sg.addColorStop(0,    'rgba(253,185,155,0.85)');
@@ -92,7 +96,6 @@ function stopGrid() {
 }
 
 // --- Petal drawing ---
-// Draws one petal shape. drawSakura calls this 5 times rotated around the center.
 function drawPetal(ctx, r, color, alpha) {
   ctx.globalAlpha = alpha;
   const pw = r * 0.52;
@@ -126,13 +129,13 @@ function drawSakura(ctx, r, color, alpha) {
   const ctx = canvas.getContext('2d');
   let W, H, particles = [], mouse = { x: -9999, y: -9999 };
 
-  const COUNT          = 55;
-  const LINK_DIST      = 140;
-  const MOUSE_DIST     = 180;
-  const LINK_ALPHA     = 0.18;
-  const MOUSE_ALPHA    = 0.28;
-  const WOBBLE_AMOUNT  = 0.35;
-  const PETAL_COLORS   = ['#f7a8c4', '#f2bdd4', '#e87baa', '#f9c4d8', '#ec93bb'];
+  const COUNT         = 55;
+  const LINK_DIST     = 140;
+  const MOUSE_DIST    = 180;
+  const LINK_ALPHA    = 0.18;
+  const MOUSE_ALPHA   = 0.28;
+  const WOBBLE_AMOUNT = 0.35;
+  const PETAL_COLORS  = ['#f7a8c4', '#f2bdd4', '#e87baa', '#f9c4d8', '#ec93bb'];
 
   function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
   function rand(a, b) { return a + Math.random() * (b - a); }
@@ -144,15 +147,11 @@ function drawSakura(ctx, r, color, alpha) {
         const isSakura = Math.random() < 0.4;
         particles.push({
           type: isSakura ? 'sakura' : 'petal',
-          x: Math.random() * W,
-          y: Math.random() * H,
-          vx: rand(-0.15, 0.15),
-          vy: rand(0.3, 0.85),
+          x: Math.random() * W, y: Math.random() * H,
+          vx: rand(-0.15, 0.15), vy: rand(0.3, 0.85),
           r: isSakura ? rand(6, 11) : rand(5, 10),
-          rot: rand(0, Math.PI * 2),
-          rotSpeed: rand(-0.014, 0.014),
-          wobble: rand(0, Math.PI * 2),
-          wobbleSpeed: rand(0.018, 0.045),
+          rot: rand(0, Math.PI * 2), rotSpeed: rand(-0.014, 0.014),
+          wobble: rand(0, Math.PI * 2), wobbleSpeed: rand(0.018, 0.045),
           alpha: rand(0.4, 0.82),
           color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)]
         });
@@ -176,9 +175,7 @@ function drawSakura(ctx, r, color, alpha) {
   function draw() {
     ctx.clearRect(0, 0, W, H);
     const lc = lineColor();
-
     for (let i = 0; i < particles.length; i++) {
-      // Particle-to-particle links
       for (let j = i + 1; j < particles.length; j++) {
         const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
         const d = Math.sqrt(dx * dx + dy * dy);
@@ -191,7 +188,6 @@ function drawSakura(ctx, r, color, alpha) {
           ctx.stroke();
         }
       }
-      // Mouse connection
       const mdx = particles[i].x - mouse.x, mdy = particles[i].y - mouse.y;
       const md = Math.sqrt(mdx * mdx + mdy * mdy);
       if (md < MOUSE_DIST) {
@@ -203,22 +199,12 @@ function drawSakura(ctx, r, color, alpha) {
         ctx.stroke();
       }
     }
-
     particles.forEach(p => {
       ctx.save();
       ctx.translate(p.x, p.y);
-      if (p.type === 'sakura') {
-        ctx.rotate(p.rot);
-        drawSakura(ctx, p.r, p.color, p.alpha);
-      } else if (p.type === 'petal') {
-        ctx.rotate(p.rot);
-        drawPetal(ctx, p.r, p.color, p.alpha);
-      } else {
-        ctx.beginPath();
-        ctx.arc(0, 0, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${lc},${p.alpha})`;
-        ctx.fill();
-      }
+      if (p.type === 'sakura') { ctx.rotate(p.rot); drawSakura(ctx, p.r, p.color, p.alpha); }
+      else if (p.type === 'petal') { ctx.rotate(p.rot); drawPetal(ctx, p.r, p.color, p.alpha); }
+      else { ctx.beginPath(); ctx.arc(0, 0, p.r, 0, Math.PI * 2); ctx.fillStyle = `rgba(${lc},${p.alpha})`; ctx.fill(); }
       ctx.restore();
     });
   }
@@ -272,15 +258,18 @@ function drawSakura(ctx, r, color, alpha) {
     ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
     requestAnimationFrame(anim);
   })();
-  document.querySelectorAll('a,[data-magnetic],button').forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-  });
 })();
 
-// --- Scroll reveal ---
-(function () {
-  const reveals = document.querySelectorAll('[data-reveal]');
+// --- Shared UI — called after each view renders ---
+
+function initToggleAndReveal() {
+  initToggle();
+  applyReveal();
+  applyMagnetic();
+  applyCursorHover();
+}
+
+function applyReveal() {
   const BASE_DELAY = 80;
   let di = 0;
   const obs = new IntersectionObserver(entries => {
@@ -292,54 +281,154 @@ function drawSakura(ctx, r, color, alpha) {
       }
     });
   }, { threshold: 0.15 });
-  reveals.forEach(el => obs.observe(el));
-})();
+  document.querySelectorAll('[data-reveal]').forEach(el => obs.observe(el));
+}
 
-// --- Magnetic hover ---
-(function () {
-  const MAGNETIC_STRENGTH   = 0.18;
-  const LEAVE_TRANSITION    = 'transform 0.4s cubic-bezier(0.23,1,0.32,1),opacity 0.6s,background 0.2s,border-color 0.2s';
-  const ENTER_TRANSITION    = 'transform 0.1s ease,opacity 0.6s,background 0.2s,border-color 0.2s';
-
+function applyMagnetic() {
+  const STRENGTH = 0.18;
+  const LEAVE = 'transform 0.4s cubic-bezier(0.23,1,0.32,1),opacity 0.6s,background 0.2s,border-color 0.2s';
+  const ENTER = 'transform 0.1s ease,opacity 0.6s,background 0.2s,border-color 0.2s';
   document.querySelectorAll('[data-magnetic]').forEach(el => {
     el.addEventListener('mousemove', e => {
       const r = el.getBoundingClientRect();
-      const tx = (e.clientX - (r.left + r.width  / 2)) * MAGNETIC_STRENGTH;
-      const ty = (e.clientY - (r.top  + r.height / 2)) * MAGNETIC_STRENGTH;
-      el.style.transform = `translate(${tx}px,${ty}px)`;
+      el.style.transform = `translate(${(e.clientX - (r.left + r.width / 2)) * STRENGTH}px,${(e.clientY - (r.top + r.height / 2)) * STRENGTH}px)`;
     });
-    el.addEventListener('mouseleave', () => {
-      el.style.transform = 'translate(0,0)';
-      el.style.transition = LEAVE_TRANSITION;
-    });
-    el.addEventListener('mouseenter', () => {
-      el.style.transition = ENTER_TRANSITION;
-    });
+    el.addEventListener('mouseleave', () => { el.style.transform = 'translate(0,0)'; el.style.transition = LEAVE; });
+    el.addEventListener('mouseenter', () => { el.style.transition = ENTER; });
   });
-})();
+}
 
-// --- Bio cycler ---
-(function () {
-  const lines = [
-    "i use arch btw",
-    "IT professional",
-    "homelabber",
-    "keeb enthusiast",
-    "producer & DJ",
-    "dubstep connoisseur",
-    "spent way too much time in FFXIV",
-    "MTG Commander player",
-    "Umamusume enjoyer",
-    "always building something",
-    "lazy gym rat",
-    "bottom text",
-    "expect some more of these bits",
-    "click the toggle button below if you haven't already!!"
-  ];
-  let idx = 0;
-  const el = document.getElementById('bio-cycler');
-  el.addEventListener('click', () => {
-    idx = (idx + 1) % lines.length;
-    el.textContent = lines[idx];
+function applyCursorHover() {
+  document.querySelectorAll('a,[data-magnetic],button,.masonry-item').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
   });
-})();
+}
+
+// --- Home view ---
+const homeView = {
+  title: "welcome to dru's domain",
+  html: `
+<main>
+  <div class="banner-wrap" data-reveal>
+    <div class="banner">
+      <img src="assets/images/banner.webp" alt="banner" />
+    </div>
+  </div>
+  <div class="header-text" data-reveal>
+    <h1>welcome to dru's domain [expansion]</h1>
+    <h1 id="bio-cycler">Click me!</h1>
+  </div>
+  <div class="status" data-reveal>
+    <div class="status-dot"></div>Bay Area, CA
+  </div>
+  <button class="theme-toggle-btn" id="toggleBtn" data-reveal aria-label="Toggle theme">
+    <img src="assets/icons/theme-dark.png" alt="dark mode" />
+  </button>
+  <div class="links-section">
+    <div class="section-label" data-reveal>Connect</div>
+    <a href="https://bsky.app/profile/bnuuy.club" class="link-card" data-reveal data-magnetic>
+      <div class="link-icon"><img src="assets/icons/bsky.svg" alt="Bluesky" /></div>
+      <div class="link-info"><strong>Bluesky</strong><span>@bnuuy.club</span></div>
+      <span class="link-arrow">→</span>
+    </a>
+    <a href="https://twitch.tv/druuji" class="link-card" data-reveal data-magnetic>
+      <div class="link-icon"><img src="assets/icons/twitch.svg" alt="Twitch" /></div>
+      <div class="link-info"><strong>Twitch</strong><span>twitch.tv/druuji</span></div>
+      <span class="link-arrow">→</span>
+    </a>
+    <div class="divider" data-reveal></div>
+    <div class="section-label" data-reveal>Projects</div>
+    <a href="javascript:void(0)" class="link-card" data-reveal data-magnetic>
+      <div class="link-icon amber"><img src="assets/icons/keeb.png" alt="Keyboard Portfolio" /></div>
+      <div class="link-info"><strong>Keyboard Portfolio</strong><span>My custom keebs built over the years. Coming soon!</span></div>
+      <span class="link-arrow">→</span>
+    </a>
+    <a href="#gallery" class="link-card" data-reveal data-magnetic>
+      <div class="link-icon amber"><img src="assets/icons/gallery.png" alt="Art Gallery" /></div>
+      <div class="link-info"><strong>Art Gallery</strong><span>Amazing artwork I've commissioned</span></div>
+      <span class="link-arrow">→</span>
+    </a>
+    <a href="https://github.com/hi-im-andrew/hi-im-andrew.github.io" class="link-card" data-reveal data-magnetic>
+      <div class="link-icon amber"><img src="assets/icons/github.svg" alt="GitHub" /></div>
+      <div class="link-info"><strong>GitHub</strong><span>Code repository of the website you're looking at</span></div>
+      <span class="link-arrow">→</span>
+    </a>
+    <div class="divider" data-reveal></div>
+    <div class="section-label" data-reveal>Music</div>
+    <a href="https://soundcloud.com/ippatsu" class="link-card" data-reveal data-magnetic>
+      <div class="link-icon"><img src="assets/icons/soundcloud.svg" alt="SoundCloud" /></div>
+      <div class="link-info"><strong>SoundCloud</strong><span>I make stupid shit</span></div>
+      <span class="link-arrow">→</span>
+    </a>
+    <a href="https://open.spotify.com/user/8j7f7yivb2aycjatum80e80rx?si=6d65ddb5c89744f9" class="link-card" data-reveal data-magnetic>
+      <div class="link-icon teal"><img src="assets/icons/spotify.svg" alt="Spotify" /></div>
+      <div class="link-info"><strong>Spotify</strong><span>Playlists and such</span></div>
+      <span class="link-arrow">→</span>
+    </a>
+  </div>
+</main>
+<footer data-reveal>made by yours truly · banner art by <a href="https://x.com/Louu_Heroo" class="footer-link">@louu_heroo</a> · 2026</footer>
+`,
+  init() {
+    const lines = [
+      "i use arch btw",
+      "IT professional",
+      "homelabber",
+      "keeb enthusiast",
+      "producer & DJ",
+      "dubstep connoisseur",
+      "spent way too much time in FFXIV",
+      "MTG Commander player",
+      "Umamusume enjoyer",
+      "always building something",
+      "lazy gym rat",
+      "bottom text",
+      "expect some more of these bits",
+      "click the toggle button below if you haven't already!!"
+    ];
+    let idx = 0;
+    const el = document.getElementById('bio-cycler');
+    el.addEventListener('click', () => {
+      idx = (idx + 1) % lines.length;
+      el.textContent = lines[idx];
+    });
+    return null;
+  }
+};
+
+// --- Router ---
+const VIEWS = {
+  '': homeView,
+  'gallery': createGalleryView({
+    dataUrl: 'gallery.json',
+    title: 'art gallery',
+    subtitle: "commissioned works · dru's domain"
+  })
+};
+
+let _teardown = null;
+
+function navigate(hash, instant) {
+  const view = document.getElementById('view');
+  const def  = VIEWS[hash] || VIEWS[''];
+
+  const swap = () => {
+    if (_teardown) { _teardown(); _teardown = null; }
+    view.innerHTML  = def.html;
+    document.title  = def.title || "welcome to dru's domain";
+    _teardown = def.init ? (def.init() || null) : null;
+    initToggleAndReveal();
+    view.classList.remove('fading');
+  };
+
+  if (instant) {
+    swap();
+  } else {
+    view.classList.add('fading');
+    setTimeout(swap, 150);
+  }
+}
+
+window.addEventListener('hashchange', () => navigate(location.hash.slice(1)));
+navigate(location.hash.slice(1), true); // instant on first load
