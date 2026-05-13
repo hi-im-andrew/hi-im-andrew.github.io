@@ -6,13 +6,16 @@
     "thumbnail": "https://cdn.bnuuy.club/cdn/images/blimax-casual-3-17-26-thumb.webp",
     "album": [
       {
-        "src": "https://cdn.bnuuy.club/cdn/images/blimax-casual-3-17-26.webp"
+        "src": "https://cdn.bnuuy.club/cdn/images/blimax-casual-3-17-26.webp",
+        "thumbnail": "https://cdn.bnuuy.club/cdn/images/blimax-casual-3-17-26-thumb.webp"
       },
       {
-        "src": "https://cdn.bnuuy.club/cdn/images/blimax-spicy-3-17-26.webp"
+        "src": "https://cdn.bnuuy.club/cdn/images/blimax-spicy-3-17-26.webp",
+        "thumbnail": "https://cdn.bnuuy.club/cdn/images/blimax-spicy-3-17-26-thumb.webp"
       },
       {
         "src": "https://cdn.bnuuy.club/cdn/images/blimax-nude-3-17-26.webp",
+        "thumbnail": "https://cdn.bnuuy.club/cdn/images/blimax-nude-3-17-26-thumb.webp",
         "nsfw": true
       }
     ]
@@ -37,22 +40,28 @@
     "nsfw": true,
     "album": [
       {
-        "src": "https://cdn.bnuuy.club/cdn/images/aru-magenta-4-15-25.webp"
+        "src": "https://cdn.bnuuy.club/cdn/images/aru-magenta-4-15-25.webp",
+        "thumbnail": "https://cdn.bnuuy.club/cdn/images/aru-magenta-4-15-25-thumb.webp"
       },
       {
-        "src": "https://cdn.bnuuy.club/cdn/images/aru-magenta-alt-4-15-25.webp"
+        "src": "https://cdn.bnuuy.club/cdn/images/aru-magenta-alt-4-15-25.webp",
+        "thumbnail": "https://cdn.bnuuy.club/cdn/images/aru-magenta-alt-4-15-25-thumb.webp"
       },
       {
-        "src": "https://cdn.bnuuy.club/cdn/images/aru-purple-4-15-25.webp"
+        "src": "https://cdn.bnuuy.club/cdn/images/aru-purple-4-15-25.webp",
+        "thumbnail": "https://cdn.bnuuy.club/cdn/images/aru-purple-4-15-25-thumb.webp"
       },
       {
-        "src": "https://cdn.bnuuy.club/cdn/images/aru-purple-alt-4-15-25.webp"
+        "src": "https://cdn.bnuuy.club/cdn/images/aru-purple-alt-4-15-25.webp",
+        "thumbnail": "https://cdn.bnuuy.club/cdn/images/aru-purple-alt-4-15-25-thumb.webp"
       },
       {
-        "src": "https://cdn.bnuuy.club/cdn/images/aru-red-4-15-25.webp"
+        "src": "https://cdn.bnuuy.club/cdn/images/aru-red-4-15-25.webp",
+        "thumbnail": "https://cdn.bnuuy.club/cdn/images/aru-red-4-15-25-thumb.webp"
       },
       {
-        "src": "https://cdn.bnuuy.club/cdn/images/aru-red-alt-4-15-25.webp"
+        "src": "https://cdn.bnuuy.club/cdn/images/aru-red-alt-4-15-25.webp",
+        "thumbnail": "https://cdn.bnuuy.club/cdn/images/aru-red-alt-4-15-25-thumb.webp"
       }
     ]
   },
