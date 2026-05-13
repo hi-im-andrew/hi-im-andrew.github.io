@@ -69,6 +69,7 @@ function createGalleryView(config) {
         <strong id="modalTitle">—</strong>
         <span id="modalArtist">—</span>
       </div>
+      <a id="modalFullLink" class="modal-full-link" target="_blank" rel="noopener noreferrer">view full image ↗</a>
     </div>
   </div>
 </div>`;
@@ -193,6 +194,7 @@ function createGalleryView(config) {
       const albumPrevBtn   = document.getElementById('modalAlbumPrev');
       const albumNextBtn   = document.getElementById('modalAlbumNext');
       const albumCounterEl = document.getElementById('modalAlbumCounter');
+      const fullLinkEl     = document.getElementById('modalFullLink');
 
       function openModal(idx) {
         currentIdx = idx;
@@ -216,8 +218,10 @@ function createGalleryView(config) {
         const oldReveal = document.getElementById('nsfwReveal');
         if (oldReveal) oldReveal.remove();
 
-        const displaySrc = hasAlbum ? item.album[albumIdx].src : item.src;
-        const displayPh  = hasAlbum ? item.album[albumIdx].ph  : item.ph;
+        const photo      = hasAlbum ? item.album[albumIdx] : item;
+        const displaySrc = photo.thumbnail || photo.src;
+        const fullSrc    = photo.src;
+        const displayPh  = photo.ph;
 
         const imgEl = displaySrc
           ? Object.assign(document.createElement('img'), { src: displaySrc, alt: item.title })
@@ -248,6 +252,13 @@ function createGalleryView(config) {
         imgArea.insertBefore(imgEl, imgArea.firstChild);
         titleEl.textContent  = item.title;
         artistEl.textContent = item.description;
+
+        if (fullSrc) {
+          fullLinkEl.href  = fullSrc;
+          fullLinkEl.style.display = '';
+        } else {
+          fullLinkEl.style.display = 'none';
+        }
 
         // Gallery prev/next
         prevBtn.style.opacity = currentIdx === 0 ? '0.35' : '1';
