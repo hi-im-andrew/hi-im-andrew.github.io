@@ -406,6 +406,19 @@ const homeView = {
       <div class="link-info"><strong>Twitch</strong><span>twitch.tv/druuji</span></div>
       <span class="link-arrow">→</span>
     </a>
+    <a href="https://www.instagram.com/iamnotandru/" class="link-card" data-reveal data-magnetic>
+      <div class="link-icon"><img src="assets/icons/instagram.svg" alt="Instagram" /></div>
+      <div class="link-info"><strong>Instagram</strong><span>Personal IG page</span></div>
+      <span class="link-arrow">→</span>
+    </a>
+    <div class="link-card discord-toggle" id="discord-toggle" data-reveal data-magnetic>
+      <div class="link-icon discord-icon"><img src="assets/icons/discord.svg" alt="Discord" /></div>
+      <div class="link-info"><strong>Discord</strong><span>Click to view</span></div>
+      <span class="discord-chevron">▾</span>
+    </div>
+    <div class="discord-dropdown" id="discord-dropdown">
+      <img src="https://discord.dog/126105851504099328.png" alt="Discord profile card" />
+    </div>
     <div class="divider" data-reveal></div>
     <div class="section-label" data-reveal>Projects</div>
     <a href="#keyboards" class="link-card" data-reveal data-magnetic>
@@ -462,6 +475,14 @@ const homeView = {
       idx = (idx + 1) % lines.length;
       el.textContent = lines[idx];
     });
+
+    const discordToggle = document.getElementById("discord-toggle");
+    const discordDropdown = document.getElementById("discord-dropdown");
+    discordToggle.addEventListener("click", () => {
+      const open = discordToggle.classList.toggle("open");
+      discordDropdown.classList.toggle("open", open);
+    });
+
     return null;
   },
 };

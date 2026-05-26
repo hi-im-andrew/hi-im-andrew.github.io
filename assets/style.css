@@ -541,6 +541,56 @@ main {
     color: #FDB99B;
 }
 
+.link-icon.discord-icon {
+    background: rgba(88, 101, 242, 0.12);
+    border-color: rgba(88, 101, 242, 0.25);
+}
+
+[site-theme="y2k"] .link-icon.discord-icon {
+    background: rgba(88, 101, 242, 0.12);
+    border-color: rgba(167, 112, 239, 0.35);
+}
+
+.discord-toggle {
+    cursor: pointer;
+    user-select: none;
+}
+
+.discord-chevron {
+    font-size: 18px;
+    color: var(--text-muted);
+    transition: transform 0.25s ease, color 0.2s;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+}
+
+.discord-toggle:hover .discord-chevron {
+    color: var(--text-primary);
+}
+
+.discord-toggle.open .discord-chevron {
+    transform: rotate(180deg);
+}
+
+.discord-dropdown {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    padding: 0 8px;
+}
+
+.discord-dropdown.open {
+    max-height: 500px;
+    padding: 8px 8px 4px;
+}
+
+.discord-dropdown img {
+    width: 100%;
+    border-radius: 10px;
+    display: block;
+}
+
 .divider {
     width: 100%;
     height: 1px;
