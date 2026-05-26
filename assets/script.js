@@ -378,6 +378,9 @@ function applyCursorHover() {
 const homeView = {
   title: "welcome to dru's domain",
   html: `
+<button class="theme-toggle-btn home-toggle" id="toggleBtn" data-reveal aria-label="Toggle theme">
+  <img src="assets/icons/theme-dark.png" alt="dark mode" />
+</button>
 <main>
   <div class="banner-wrap" data-reveal>
     <div class="banner">
@@ -388,19 +391,49 @@ const homeView = {
     <h1>welcome to dru's domain [expansion]</h1>
     <h1 id="bio-cycler">Click me!</h1>
   </div>
+  <div class="about-box" data-reveal>
+    <div class="about-section">
+      <span class="about-label">About</span>
+      <p>
+      Hello! If you're here, you've either met me at a convention, rave, someplace online, or some other event.</br>
+      </br>
+      he/him - 25 - raver, tech nerd, a true night owl</br>
+      </br>
+      I love meeting new people. Shoot me a friend request on Discord (more info below) and let me know where you come from!
+      </p>
+    </div>
+    <div class="about-divider"></div>
+    <div class="about-section">
+      <span class="about-label">Interests</span>
+      <p>
+      anime, manga, manhwa, light novels</br>
+      dubstep, riddim, UK garage, drum & bass, future bass, color bass, R&B and K-R&B</br>
+      </br>
+      I mostly play FFXIV, League, and Marvel Rivals. Got a huge Steam backlog that I need to get through eventually.</br>
+      Retired gacha gamer 🥀💔</br>
+      </br>
+      Find me on FFXIV: Yae Kasumi @ Jenova (Aether)
+      </p>
+    </div>
+    <div class="about-divider"></div>
+    <div class="about-section">
+      <span class="about-label">Currently</span>
+      <p>
+      upcoming events:</br>
+      - Offkai Expo 2026</br>
+      - PAX West 2026 (?)</br>
+      - ALA 2027 (?)</br>
+      - EDC Dawn 2027</br>
+      </br>
+      always adding more to this page ❤️</br>
+      </p>
+    </div>
+  </div>
   <div class="status" data-reveal>
     <div class="status-dot"></div>Bay Area, CA
   </div>
-  <button class="theme-toggle-btn" id="toggleBtn" data-reveal aria-label="Toggle theme">
-    <img src="assets/icons/theme-dark.png" alt="dark mode" />
-  </button>
   <div class="links-section">
     <div class="section-label" data-reveal>Connect</div>
-    <a href="https://bsky.app/profile/bnuuy.club" class="link-card" data-reveal data-magnetic>
-      <div class="link-icon"><img src="assets/icons/bsky.svg" alt="Bluesky" /></div>
-      <div class="link-info"><strong>Bluesky</strong><span>@bnuuy.club</span></div>
-      <span class="link-arrow">→</span>
-    </a>
     <a href="https://twitch.tv/druuji" class="link-card" data-reveal data-magnetic>
       <div class="link-icon"><img src="assets/icons/twitch.svg" alt="Twitch" /></div>
       <div class="link-info"><strong>Twitch</strong><span>twitch.tv/druuji</span></div>
@@ -409,6 +442,16 @@ const homeView = {
     <a href="https://www.instagram.com/iamnotandru/" class="link-card" data-reveal data-magnetic>
       <div class="link-icon"><img src="assets/icons/instagram.svg" alt="Instagram" /></div>
       <div class="link-info"><strong>Instagram</strong><span>Personal IG page</span></div>
+      <span class="link-arrow">→</span>
+    </a>
+    <a href="https://bsky.app/profile/bnuuy.club" class="link-card" data-reveal data-magnetic>
+      <div class="link-icon"><img src="assets/icons/bsky.svg" alt="Bluesky" /></div>
+      <div class="link-info"><strong>Bluesky</strong><span>@bnuuy.club - gpose archive</span></div>
+      <span class="link-arrow">→</span>
+    </a>
+    <a href="https://tomestone.gg/character/47113691/yae-kasumi" class="link-card" data-reveal data-magnetic>
+      <div class="link-icon"><img src="https://assets.tomestone.gg/static/logo.webp" alt="Tomestone" /></div>
+      <div class="link-info"><strong>Tomestone</strong><span>For my fellow Eorzea gamers</span></div>
       <span class="link-arrow">→</span>
     </a>
     <div class="link-card discord-toggle" id="discord-toggle" data-reveal data-magnetic>
@@ -432,8 +475,8 @@ const homeView = {
       <span class="link-arrow">→</span>
     </a>
     <a href="https://github.com/hi-im-andrew/hi-im-andrew.github.io" class="link-card" data-reveal data-magnetic>
-      <div class="link-icon amber"><img src="assets/icons/github.svg" alt="GitHub" /></div>
-      <div class="link-info"><strong>GitHub</strong><span>Code repository of the website you're looking at</span></div>
+      <div class="link-icon amber"><img src="assets/icons/github.svg" alt="This Website" /></div>
+      <div class="link-info"><strong>This Website</strong><span>GitHub repository of the website you're looking at</span></div>
       <span class="link-arrow">→</span>
     </a>
     <div class="divider" data-reveal></div>
