@@ -388,7 +388,7 @@ const homeView = {
     </div>
   </div>
   <div class="header-text" data-reveal>
-    <h1>welcome to dru's domain [expansion]</h1>
+    <h1>welcome to dru's domain expansion</h1>
     <h1 id="bio-cycler">Click me!</h1>
   </div>
   <div class="about-box" data-reveal>
@@ -397,9 +397,9 @@ const homeView = {
       <p>
       Hello! If you're here, you've either met me at a convention, rave, someplace online, or some other event.</br>
       </br>
-      he/him - 25 - raver, tech nerd, a true night owl</br>
+      Andrew - he/him - 25 - raver, tech nerd, a true night owl</br>
       </br>
-      I love meeting new people. Shoot me a friend request on Discord (more info below) and let me know where you come from!
+      I love meeting new people. Shoot me a friend request on Discord (@druuji) and let me know where you're coming from!
       </p>
     </div>
     <div class="about-divider"></div>
@@ -409,7 +409,7 @@ const homeView = {
       anime, manga, manhwa, light novels</br>
       dubstep, riddim, UK garage, drum & bass, future bass, color bass, R&B and K-R&B</br>
       </br>
-      I mostly play FFXIV, League, and Marvel Rivals. Got a huge Steam backlog that I need to get through eventually.</br>
+      I mostly play FFXIV, MTG Commander, League, and Marvel Rivals. Got a huge Steam backlog that I need to get through eventually.</br>
       Retired gacha gamer 🥀💔</br>
       </br>
       Find me on FFXIV: Yae Kasumi @ Jenova (Aether)
@@ -421,7 +421,6 @@ const homeView = {
       <p>
       upcoming events:</br>
       - Offkai Expo 2026</br>
-      - PAX West 2026 (?)</br>
       - ALA 2027 (?)</br>
       - EDC Dawn 2027</br>
       </br>
@@ -503,14 +502,14 @@ const homeView = {
       "keeb enthusiast",
       "producer & DJ",
       "dubstep connoisseur",
-      "spent way too much time in FFXIV",
+      "too many hours in FFXIV",
       "MTG Commander player",
       "Umamusume enjoyer",
       "always building something",
       "lazy gym rat",
       "bottom text",
       "expect some more of these bits",
-      "click the toggle button below if you haven't already!!",
+      "click the toggle button in the top right corner if you haven't already!!",
     ];
     let idx = 0;
     const el = document.getElementById("bio-cycler");
