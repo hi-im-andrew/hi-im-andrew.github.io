@@ -392,12 +392,12 @@ const homeView = {
     <h1>welcome to dru's domain expansion</h1>
     <h1 id="bio-cycler">Click me!</h1>
   </div>
-  <div class="win98-window" data-reveal>
+  <div class="win98-window">
     <div class="win98-titlebar">
       <span>About Me</span>
       <div class="win98-titlebar-btns"><span>_</span><span>□</span><span>✕</span></div>
     </div>
-    <div class="about-box">
+    <div class="about-box" data-reveal>
       <div class="about-section">
         <span class="about-label">About</span>
         <p>
@@ -439,13 +439,13 @@ const homeView = {
     <div class="status-dot"></div>Bay Area, CA
   </div>
   <div class="links-section">
-    <div class="win98-window" data-reveal>
+    <div class="win98-window">
       <div class="win98-titlebar">
         <span>Connect</span>
         <div class="win98-titlebar-btns"><span>_</span><span>□</span><span>✕</span></div>
       </div>
       <div class="win98-section-body">
-        <div class="section-label">Connect</div>
+        <div class="section-label" data-reveal>Connect</div>
         <a href="https://twitch.tv/druuji" class="link-card" data-reveal data-magnetic>
           <div class="link-icon"><img src="assets/icons/twitch.svg" alt="Twitch" /></div>
           <div class="link-info"><strong>Twitch</strong><span>twitch.tv/druuji</span></div>
@@ -477,13 +477,13 @@ const homeView = {
       </div>
     </div>
     <div class="divider" data-reveal></div>
-    <div class="win98-window" data-reveal>
+    <div class="win98-window">
       <div class="win98-titlebar">
         <span>Projects</span>
         <div class="win98-titlebar-btns"><span>_</span><span>□</span><span>✕</span></div>
       </div>
       <div class="win98-section-body">
-        <div class="section-label">Projects</div>
+        <div class="section-label" data-reveal>Projects</div>
         <a href="#keyboards" class="link-card" data-reveal data-magnetic>
           <div class="link-icon amber"><img src="assets/icons/keeb.png" alt="Keyboard Portfolio" /></div>
           <div class="link-info"><strong>Keyboard Portfolio</strong><span>My custom keebs built over the years</span></div>
@@ -502,13 +502,13 @@ const homeView = {
       </div>
     </div>
     <div class="divider" data-reveal></div>
-    <div class="win98-window" data-reveal>
+    <div class="win98-window">
       <div class="win98-titlebar">
         <span>Music</span>
         <div class="win98-titlebar-btns"><span>_</span><span>□</span><span>✕</span></div>
       </div>
       <div class="win98-section-body">
-        <div class="section-label">Music</div>
+        <div class="section-label" data-reveal>Music</div>
         <a href="https://soundcloud.com/ippatsu" class="link-card" data-reveal data-magnetic>
           <div class="link-icon"><img src="assets/icons/soundcloud.svg" alt="SoundCloud" /></div>
           <div class="link-info"><strong>SoundCloud</strong><span>I make stupid shit</span></div>

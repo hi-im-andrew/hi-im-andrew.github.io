@@ -51,7 +51,7 @@ body::before {
     position: fixed;
     inset: 0;
     z-index: -2;
-    background: linear-gradient(to bottom, #6baed6 0%, #74c476 55%, #238b45 100%);
+    background: linear-gradient(to bottom, #6baed6 0%, #74c476 85%, #238b45 100%);
     opacity: 0;
     transition: opacity 0.5s ease;
 }
@@ -1277,6 +1277,12 @@ footer.visible {
 }
 
 .win98-titlebar { display: none; }
+
+.win98-section-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
 
 [site-theme="win98"] #particles { opacity: 0; }
 
