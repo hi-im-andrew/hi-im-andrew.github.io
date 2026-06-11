@@ -1,13 +1,14 @@
 const root = document.documentElement;
-const THEMES = ["dark", "light", "y2k"];
+const THEMES = ["dark", "light", "vaporwave", "win98"];
 const ICONS = {
-  dark: '<img src="assets/icons/theme-dark.png"  alt="dark mode"  />',
-  light: '<img src="assets/icons/theme-light.png" alt="light mode" />',
-  y2k: '<img src="assets/icons/theme-y2k.png"   alt="y2k mode"  />',
+  dark:      '<img src="assets/icons/theme-dark.png"      alt="dark mode"      />',
+  light:     '<img src="assets/icons/theme-light.png"     alt="light mode"     />',
+  vaporwave: '<img src="assets/icons/theme-vaporwave.png" alt="vaporwave mode" />',
+  win98:     '<img src="assets/icons/theme-win98.png"     alt="win98 mode"     />',
 };
 let gridAnim = null;
 let currentTheme = root.getAttribute("site-theme") || "dark";
-if (currentTheme === "y2k") startGrid();
+if (currentTheme === "vaporwave") startGrid();
 
 // Called after each view renders to wire up the toggle button in that view.
 function initToggle() {
@@ -20,7 +21,7 @@ function initToggle() {
     root.setAttribute("site-theme", currentTheme);
     localStorage.setItem("theme", currentTheme);
     btn.innerHTML = ICONS[currentTheme];
-    if (currentTheme === "y2k") startGrid();
+    if (currentTheme === "vaporwave") startGrid();
     else stopGrid();
   });
 }
@@ -189,7 +190,7 @@ function drawSakura(ctx, r, color, alpha) {
   }
 
   function lineColor() {
-    if (currentTheme === "y2k") return "167,112,239";
+    if (currentTheme === "vaporwave") return "167,112,239";
     if (currentTheme === "light") return "212,83,126";
     return "127,119,221";
   }
@@ -391,105 +392,135 @@ const homeView = {
     <h1>welcome to dru's domain expansion</h1>
     <h1 id="bio-cycler">Click me!</h1>
   </div>
-  <div class="about-box" data-reveal>
-    <div class="about-section">
-      <span class="about-label">About</span>
-      <p>
-      Hello! If you're here, you've either met me at a convention, rave, someplace online, or some other event.</br>
-      </br>
-      Andrew - he/him - 25 - raver, tech nerd, a true night owl</br>
-      </br>
-      I love meeting new people. Shoot me a friend request on Discord (@druuji) and let me know where you're coming from!
-      </p>
+  <div class="win98-window" data-reveal>
+    <div class="win98-titlebar">
+      <span>About Me</span>
+      <div class="win98-titlebar-btns"><span>_</span><span>□</span><span>✕</span></div>
     </div>
-    <div class="about-divider"></div>
-    <div class="about-section">
-      <span class="about-label">Interests</span>
-      <p>
-      anime, manga, manhwa, light novels</br>
-      dubstep, riddim, UK garage, drum & bass, future bass, color bass, R&B and K-R&B</br>
-      </br>
-      I mostly play FFXIV, MTG Commander, League, and Marvel Rivals. Got a huge Steam backlog that I need to get through eventually.</br>
-      Retired gacha gamer 🥀💔</br>
-      </br>
-      Find me on FFXIV: Yae Kasumi @ Jenova (Aether)
-      </p>
-    </div>
-    <div class="about-divider"></div>
-    <div class="about-section">
-      <span class="about-label">Currently</span>
-      <p>
-      upcoming events:</br>
-      - Offkai Expo 2026</br>
-      - ALA 2027 (?)</br>
-      - EDC Dawn 2027</br>
-      </br>
-      always adding more to this page ❤️</br>
-      </p>
+    <div class="about-box">
+      <div class="about-section">
+        <span class="about-label">About</span>
+        <p>
+        Hello! If you're here, you've either met me at a convention, rave, someplace online, or some other event.</br>
+        </br>
+        Andrew - he/him - 25 - raver, tech nerd, a true night owl</br>
+        </br>
+        I love meeting new people. Shoot me a friend request on Discord (@druuji) and let me know where you're coming from!
+        </p>
+      </div>
+      <div class="about-divider"></div>
+      <div class="about-section">
+        <span class="about-label">Interests</span>
+        <p>
+        anime, manga, manhwa, light novels</br>
+        dubstep, riddim, UK garage, drum & bass, future bass, color bass, R&B and K-R&B</br>
+        </br>
+        I mostly play FFXIV, MTG Commander, League, and Marvel Rivals. Got a huge Steam backlog that I need to get through eventually.</br>
+        Retired gacha gamer 🥀💔</br>
+        </br>
+        Find me on FFXIV: Yae Kasumi @ Jenova (Aether)
+        </p>
+      </div>
+      <div class="about-divider"></div>
+      <div class="about-section">
+        <span class="about-label">Currently</span>
+        <p>
+        upcoming events:</br>
+        - Offkai Expo 2026</br>
+        - ALA 2027 (?)</br>
+        - EDC Dawn 2027</br>
+        </br>
+        always adding more to this page ❤️</br>
+        </p>
+      </div>
     </div>
   </div>
   <div class="status" data-reveal>
     <div class="status-dot"></div>Bay Area, CA
   </div>
   <div class="links-section">
-    <div class="section-label" data-reveal>Connect</div>
-    <a href="https://twitch.tv/druuji" class="link-card" data-reveal data-magnetic>
-      <div class="link-icon"><img src="assets/icons/twitch.svg" alt="Twitch" /></div>
-      <div class="link-info"><strong>Twitch</strong><span>twitch.tv/druuji</span></div>
-      <span class="link-arrow">→</span>
-    </a>
-    <a href="https://www.instagram.com/iamnotandru/" class="link-card" data-reveal data-magnetic>
-      <div class="link-icon"><img src="assets/icons/instagram.svg" alt="Instagram" /></div>
-      <div class="link-info"><strong>Instagram</strong><span>Personal IG page</span></div>
-      <span class="link-arrow">→</span>
-    </a>
-    <a href="https://bsky.app/profile/bnuuy.club" class="link-card" data-reveal data-magnetic>
-      <div class="link-icon"><img src="assets/icons/bsky.svg" alt="Bluesky" /></div>
-      <div class="link-info"><strong>Bluesky</strong><span>@bnuuy.club - gpose archive</span></div>
-      <span class="link-arrow">→</span>
-    </a>
-    <a href="https://tomestone.gg/character/47113691/yae-kasumi" class="link-card" data-reveal data-magnetic>
-      <div class="link-icon"><img src="https://assets.tomestone.gg/static/logo.webp" alt="Tomestone" /></div>
-      <div class="link-info"><strong>Tomestone</strong><span>For my fellow Eorzea gamers</span></div>
-      <span class="link-arrow">→</span>
-    </a>
-    <div class="link-card discord-toggle" id="discord-toggle" data-reveal data-magnetic>
-      <div class="link-icon discord-icon"><img src="assets/icons/discord.svg" alt="Discord" /></div>
-      <div class="link-info"><strong>Discord</strong><span>Click to view</span></div>
-      <span class="discord-chevron">▾</span>
-    </div>
-    <div class="discord-dropdown" id="discord-dropdown">
-      <img src="https://discord.dog/126105851504099328.png" alt="Discord profile card" />
+    <div class="win98-window" data-reveal>
+      <div class="win98-titlebar">
+        <span>Connect</span>
+        <div class="win98-titlebar-btns"><span>_</span><span>□</span><span>✕</span></div>
+      </div>
+      <div class="win98-section-body">
+        <div class="section-label">Connect</div>
+        <a href="https://twitch.tv/druuji" class="link-card" data-reveal data-magnetic>
+          <div class="link-icon"><img src="assets/icons/twitch.svg" alt="Twitch" /></div>
+          <div class="link-info"><strong>Twitch</strong><span>twitch.tv/druuji</span></div>
+          <span class="link-arrow">→</span>
+        </a>
+        <a href="https://www.instagram.com/iamnotandru/" class="link-card" data-reveal data-magnetic>
+          <div class="link-icon"><img src="assets/icons/instagram.svg" alt="Instagram" /></div>
+          <div class="link-info"><strong>Instagram</strong><span>Personal IG page</span></div>
+          <span class="link-arrow">→</span>
+        </a>
+        <a href="https://bsky.app/profile/bnuuy.club" class="link-card" data-reveal data-magnetic>
+          <div class="link-icon"><img src="assets/icons/bsky.svg" alt="Bluesky" /></div>
+          <div class="link-info"><strong>Bluesky</strong><span>@bnuuy.club - gpose archive</span></div>
+          <span class="link-arrow">→</span>
+        </a>
+        <a href="https://tomestone.gg/character/47113691/yae-kasumi" class="link-card" data-reveal data-magnetic>
+          <div class="link-icon"><img src="https://assets.tomestone.gg/static/logo.webp" alt="Tomestone" /></div>
+          <div class="link-info"><strong>Tomestone</strong><span>For my fellow Eorzea gamers</span></div>
+          <span class="link-arrow">→</span>
+        </a>
+        <div class="link-card discord-toggle" id="discord-toggle" data-reveal data-magnetic>
+          <div class="link-icon discord-icon"><img src="assets/icons/discord.svg" alt="Discord" /></div>
+          <div class="link-info"><strong>Discord</strong><span>Click to view</span></div>
+          <span class="discord-chevron">▾</span>
+        </div>
+        <div class="discord-dropdown" id="discord-dropdown">
+          <img src="https://discord.dog/126105851504099328.png" alt="Discord profile card" />
+        </div>
+      </div>
     </div>
     <div class="divider" data-reveal></div>
-    <div class="section-label" data-reveal>Projects</div>
-    <a href="#keyboards" class="link-card" data-reveal data-magnetic>
-      <div class="link-icon amber"><img src="assets/icons/keeb.png" alt="Keyboard Portfolio" /></div>
-      <div class="link-info"><strong>Keyboard Portfolio</strong><span>My custom keebs built over the years</span></div>
-      <span class="link-arrow">→</span>
-    </a>
-    <a href="#commissions" class="link-card" data-reveal data-magnetic>
-      <div class="link-icon amber"><img src="assets/icons/gallery.png" alt="Art Commissions" /></div>
-      <div class="link-info"><strong>Art Commissions</strong><span>Amazing artwork I've commissioned</span></div>
-      <span class="link-arrow">→</span>
-    </a>
-    <a href="https://github.com/hi-im-andrew/hi-im-andrew.github.io" class="link-card" data-reveal data-magnetic>
-      <div class="link-icon amber"><img src="assets/icons/github.svg" alt="This Website" /></div>
-      <div class="link-info"><strong>This Website</strong><span>GitHub repository of the website you're looking at</span></div>
-      <span class="link-arrow">→</span>
-    </a>
+    <div class="win98-window" data-reveal>
+      <div class="win98-titlebar">
+        <span>Projects</span>
+        <div class="win98-titlebar-btns"><span>_</span><span>□</span><span>✕</span></div>
+      </div>
+      <div class="win98-section-body">
+        <div class="section-label">Projects</div>
+        <a href="#keyboards" class="link-card" data-reveal data-magnetic>
+          <div class="link-icon amber"><img src="assets/icons/keeb.png" alt="Keyboard Portfolio" /></div>
+          <div class="link-info"><strong>Keyboard Portfolio</strong><span>My custom keebs built over the years</span></div>
+          <span class="link-arrow">→</span>
+        </a>
+        <a href="#commissions" class="link-card" data-reveal data-magnetic>
+          <div class="link-icon amber"><img src="assets/icons/gallery.png" alt="Art Commissions" /></div>
+          <div class="link-info"><strong>Art Commissions</strong><span>Amazing artwork I've commissioned</span></div>
+          <span class="link-arrow">→</span>
+        </a>
+        <a href="https://github.com/hi-im-andrew/hi-im-andrew.github.io" class="link-card" data-reveal data-magnetic>
+          <div class="link-icon amber"><img src="assets/icons/github.svg" alt="This Website" /></div>
+          <div class="link-info"><strong>This Website</strong><span>GitHub repository of the website you're looking at</span></div>
+          <span class="link-arrow">→</span>
+        </a>
+      </div>
+    </div>
     <div class="divider" data-reveal></div>
-    <div class="section-label" data-reveal>Music</div>
-    <a href="https://soundcloud.com/ippatsu" class="link-card" data-reveal data-magnetic>
-      <div class="link-icon"><img src="assets/icons/soundcloud.svg" alt="SoundCloud" /></div>
-      <div class="link-info"><strong>SoundCloud</strong><span>I make stupid shit</span></div>
-      <span class="link-arrow">→</span>
-    </a>
-    <a href="https://open.spotify.com/user/8j7f7yivb2aycjatum80e80rx?si=6d65ddb5c89744f9" class="link-card" data-reveal data-magnetic>
-      <div class="link-icon teal"><img src="assets/icons/spotify.svg" alt="Spotify" /></div>
-      <div class="link-info"><strong>Spotify</strong><span>Playlists and such</span></div>
-      <span class="link-arrow">→</span>
-    </a>
+    <div class="win98-window" data-reveal>
+      <div class="win98-titlebar">
+        <span>Music</span>
+        <div class="win98-titlebar-btns"><span>_</span><span>□</span><span>✕</span></div>
+      </div>
+      <div class="win98-section-body">
+        <div class="section-label">Music</div>
+        <a href="https://soundcloud.com/ippatsu" class="link-card" data-reveal data-magnetic>
+          <div class="link-icon"><img src="assets/icons/soundcloud.svg" alt="SoundCloud" /></div>
+          <div class="link-info"><strong>SoundCloud</strong><span>I make stupid shit</span></div>
+          <span class="link-arrow">→</span>
+        </a>
+        <a href="https://open.spotify.com/user/8j7f7yivb2aycjatum80e80rx?si=6d65ddb5c89744f9" class="link-card" data-reveal data-magnetic>
+          <div class="link-icon teal"><img src="assets/icons/spotify.svg" alt="Spotify" /></div>
+          <div class="link-info"><strong>Spotify</strong><span>Playlists and such</span></div>
+          <span class="link-arrow">→</span>
+        </a>
+      </div>
+    </div>
   </div>
 </main>
 <footer data-reveal>made by yours truly · banner art by <a href="https://x.com/Louu_Heroo" class="footer-link">@louu_heroo</a> · 2026</footer>
