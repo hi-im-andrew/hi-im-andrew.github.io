@@ -508,6 +508,7 @@ const homeView = {
       "MTG Commander player",
       "Umamusume enjoyer",
       "always building something",
+      "3D printing things I don't wanna buy",
       "lazy gym rat",
       "bottom text",
       "expect some more of these bits",
