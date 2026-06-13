@@ -420,8 +420,10 @@ const homeView = {
       <span class="about-label">Currently</span>
       <p>
       upcoming events:</br>
+      - Anime Expo 2026</br>
       - Offkai Expo 2026</br>
-      - ALA 2027 (?)</br>
+      - Bass Canyon 2026 (?)</br>
+      - ALA 2027</br>
       - EDC Dawn 2027</br>
       </br>
       always adding more to this page ❤️</br>
